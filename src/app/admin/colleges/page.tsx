@@ -19,9 +19,12 @@ export default function AdminCollegesPage() {
   const [colleges, setColleges] = useState<College[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
   const [form, setForm] = useState({
     name: '', city: '', state: '', description: '',
     status: 'inactive', daily_visit_capacity: 5, is_featured: false,
+    fee_min: '' as string | number, fee_max: '' as string | number,
   })
 
   const fetchColleges = async () => {
@@ -34,35 +37,49 @@ export default function AdminCollegesPage() {
   useEffect(() => { fetchColleges() }, [])
 
   const handleCreate = async () => {
+    const payload: Record<string, unknown> = { ...form }
+    // Convert fee fields: empty string -> null, otherwise number
+    payload.fee_min = form.fee_min === '' ? null : Number(form.fee_min)
+    payload.fee_max = form.fee_max === '' ? null : Number(form.fee_max)
+
     const res = await fetch('/api/admin/colleges', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
     })
     if (res.ok) {
       setShowForm(false)
-      setForm({ name: '', city: '', state: '', description: '', status: 'inactive', daily_visit_capacity: 5, is_featured: false })
+      setForm({ name: '', city: '', state: '', description: '', status: 'inactive', daily_visit_capacity: 5, is_featured: false, fee_min: '', fee_max: '' })
       fetchColleges()
     }
   }
 
   const handleToggleStatus = async (id: string, currentStatus: string) => {
     const newStatus = currentStatus === 'active' ? 'inactive' : 'active'
-    await fetch(`/api/admin/colleges/${id}`, {
+    // Optimistic update
+    setColleges(prev => prev.map(c => c.id === id ? { ...c, status: newStatus } : c))
+    const res = await fetch(`/api/admin/colleges/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: newStatus }),
     })
-    fetchColleges()
+    if (!res.ok) {
+      // Revert on failure
+      setColleges(prev => prev.map(c => c.id === id ? { ...c, status: currentStatus } : c))
+    }
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure? This will soft-delete the college.')) return
+    setDeleteError(null)
+    // Optimistic update: mark as deleted immediately
+    setColleges(prev => prev.map(c => c.id === id ? { ...c, is_deleted: true } : c))
+    setConfirmDeleteId(null)
     const res = await fetch(`/api/admin/colleges/${id}`, { method: 'DELETE' })
-    if (res.ok) fetchColleges()
-    else {
+    if (!res.ok) {
+      // Revert on failure
+      setColleges(prev => prev.map(c => c.id === id ? { ...c, is_deleted: false } : c))
       const data = await res.json()
-      alert(data.error)
+      setDeleteError(data.error || 'Failed to delete college')
     }
   }
 
@@ -114,6 +131,30 @@ export default function AdminCollegesPage() {
                 <input value={form.state} onChange={(e) => setForm({...form, state: e.target.value})} placeholder="State" className={inputClass} />
               </div>
               <textarea value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} placeholder="Description (optional)" className={`${inputClass} resize-none`} rows={3} />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-muted-foreground">Minimum Fee (INR/year)</label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={form.fee_min}
+                    onChange={(e) => setForm({...form, fee_min: e.target.value === '' ? '' : Number(e.target.value)})}
+                    placeholder="e.g. 50000"
+                    className={inputClass}
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-muted-foreground">Maximum Fee (INR/year)</label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={form.fee_max}
+                    onChange={(e) => setForm({...form, fee_max: e.target.value === '' ? '' : Number(e.target.value)})}
+                    placeholder="e.g. 200000"
+                    className={inputClass}
+                  />
+                </div>
+              </div>
               <button onClick={handleCreate} className="rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/90 hover:-translate-y-0.5">
                 Create College
               </button>
@@ -121,6 +162,13 @@ export default function AdminCollegesPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {deleteError && (
+        <div className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 flex items-center justify-between">
+          <span>{deleteError}</span>
+          <button onClick={() => setDeleteError(null)} className="text-red-500 hover:text-red-700 text-xs font-medium">Dismiss</button>
+        </div>
+      )}
 
       {loading ? (
         <div className="mt-8 flex items-center gap-2 text-muted-foreground">
@@ -167,14 +215,34 @@ export default function AdminCollegesPage() {
                   <td className="px-5 py-4">
                     {!c.is_deleted ? (
                       <div className="flex items-center gap-2">
-                        <button onClick={() => handleToggleStatus(c.id, c.status)}
-                          className="rounded-lg px-2.5 py-1 text-xs font-medium text-primary hover:bg-primary/5 transition-colors">
-                          {c.status === 'active' ? 'Deactivate' : 'Activate'}
-                        </button>
-                        <button onClick={() => handleDelete(c.id)}
-                          className="rounded-lg px-2.5 py-1 text-xs font-medium text-destructive hover:bg-red-50 transition-colors">
-                          Delete
-                        </button>
+                        {confirmDeleteId === c.id ? (
+                          <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5">
+                            <span className="text-xs font-medium text-red-700">Are you sure?</span>
+                            <button
+                              onClick={() => handleDelete(c.id)}
+                              className="rounded-md bg-destructive px-2.5 py-1 text-xs font-semibold text-white hover:bg-destructive/90 transition-colors"
+                            >
+                              Confirm
+                            </button>
+                            <button
+                              onClick={() => setConfirmDeleteId(null)}
+                              className="rounded-md border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-background transition-colors"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <button onClick={() => handleToggleStatus(c.id, c.status)}
+                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-primary hover:bg-primary/5 transition-colors">
+                              {c.status === 'active' ? 'Deactivate' : 'Activate'}
+                            </button>
+                            <button onClick={() => setConfirmDeleteId(c.id)}
+                              className="rounded-lg px-2.5 py-1 text-xs font-medium text-destructive hover:bg-red-50 transition-colors">
+                              Delete
+                            </button>
+                          </>
+                        )}
                       </div>
                     ) : (
                       <span className="text-xs text-muted-foreground">Deleted</span>

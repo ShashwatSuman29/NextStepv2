@@ -9,6 +9,8 @@ export const createCollegeSchema = z.object({
   daily_visit_capacity: z.number().int().min(5).max(10).default(5),
   status: z.enum(['active', 'inactive']).default('inactive'),
   is_featured: z.boolean().default(false),
+  fee_min: z.number().int().min(0).nullable().optional(),
+  fee_max: z.number().int().min(0).nullable().optional(),
 })
 
 export const updateCollegeSchema = createCollegeSchema.partial()

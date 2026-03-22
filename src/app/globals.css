@@ -1,29 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  /* Core palette — deep indigo + warm accents */
-  --background: #fafaf9;
-  --foreground: #1c1917;
-  --primary: #4338ca;
+  /* New NextStep palette — warm, sophisticated */
+  --background: #faf8f3;
+  --foreground: #1a1814;
+  --primary: #3d6b5e;
   --primary-foreground: #ffffff;
-  --secondary: #f59e0b;
-  --secondary-foreground: #451a03;
-  --muted: #f5f3f0;
-  --muted-foreground: #78716c;
-  --border: #e7e5e4;
-  --ring: #4338ca;
-  --destructive: #dc2626;
-  --accent: #f0edeb;
-  --accent-foreground: #1c1917;
+  --secondary: #c8651a;
+  --secondary-foreground: #ffffff;
+  --muted: #f2efe8;
+  --muted-foreground: #6b6560;
+  --border: #e2ddd5;
+  --ring: #3d6b5e;
+  --destructive: #b91c1c;
+  --accent: #ede9e0;
+  --accent-foreground: #1a1814;
   --card: #ffffff;
-  --card-foreground: #1c1917;
+  --card-foreground: #1a1814;
   --radius: 0.75rem;
 
   /* Extended palette */
-  --primary-light: #e0e7ff;
-  --primary-dark: #312e81;
-  --surface-warm: #fef7ed;
-  --surface-glass: rgba(255, 255, 255, 0.7);
+  --primary-light: #e8f0ed;
+  --primary-dark: #2a4d42;
+  --surface-warm: #fdf5eb;
+  --surface-glass: rgba(250, 248, 243, 0.8);
+  --gold: #d4a843;
+  --gold-light: #faf3e0;
+  --orange: #c8651a;
+  --orange-light: #fef0e4;
   --shadow-color: 220 3% 15%;
   --shadow-elevation-low:
     0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.1),
@@ -64,6 +68,10 @@
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-surface-warm: var(--surface-warm);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-orange: var(--orange);
+  --color-orange-light: var(--orange-light);
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
 }
@@ -72,7 +80,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans, 'Plus Jakarta Sans', system-ui, sans-serif);
+  font-family: var(--font-sans, 'DM Sans', system-ui, sans-serif);
   letter-spacing: -0.011em;
   line-height: 1.6;
 }
@@ -83,7 +91,7 @@ body {
 
 /* ---- Typography ---- */
 h1, h2, h3, h4 {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
@@ -144,7 +152,7 @@ html[data-scroll-behavior="smooth"] {
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #818cf8 0%, #c084fc 40%, var(--secondary) 100%);
+  background: linear-gradient(135deg, #3d6b5e 0%, #d4a843 50%, #c8651a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

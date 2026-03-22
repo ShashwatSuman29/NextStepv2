@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 /**
@@ -17,10 +17,10 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Provide 1-5 college IDs' }, { status: 400 })
   }
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const { data, error } = await supabase
     .from('colleges')
-    .select('*, college_courses(*)')
+    .select('id, name, city, state, description, fee_min, fee_max, daily_visit_capacity, college_courses(id, course_name, branch, stream, duration_years, annual_fee, exams_accepted)')
     .in('id', ids)
     .eq('status', 'active')
     .eq('is_deleted', false)

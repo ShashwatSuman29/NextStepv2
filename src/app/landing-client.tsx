@@ -1,7 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { createClient } from '@/lib/supabase/client'
 import { Navbar } from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/shared/animated-section'
@@ -22,6 +24,15 @@ interface FeaturedCollege {
 }
 
 export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsLoggedIn(!!session?.user)
+    })
+  }, [])
+
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar variant="transparent" />
@@ -97,10 +108,10 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
                 className="mt-8 flex flex-col gap-4 sm:flex-row"
               >
                 <Link
-                  href="/auth/login"
+                  href={isLoggedIn ? '/dashboard' : '/auth/login'}
                   className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-white px-7 py-3.5 text-sm font-semibold text-primary-dark shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
                 >
-                  Get Started Free
+                  {isLoggedIn ? 'Go to Dashboard' : 'Get Started Free'}
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:translate-x-0.5">
                     <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
@@ -401,10 +412,10 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
           </p>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href="/auth/login"
+              href={isLoggedIn ? '/dashboard' : '/auth/login'}
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 text-sm font-bold text-primary-dark shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
             >
-              Start Your Journey
+              {isLoggedIn ? 'Go to Dashboard' : 'Start Your Journey'}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform group-hover:translate-x-0.5">
                 <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

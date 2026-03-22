@@ -1,17 +1,18 @@
 import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans, Playfair_Display } from 'next/font/google'
+import { DM_Sans, Cormorant_Garamond } from 'next/font/google'
 import { QueryProvider } from '@/components/providers/query-provider'
 import './globals.css'
 
-const jakarta = Plus_Jakarta_Sans({
+const dmSans = DM_Sans({
   variable: '--font-sans',
   subsets: ['latin'],
   display: 'swap',
 })
 
-const playfair = Playfair_Display({
+const cormorant = Cormorant_Garamond({
   variable: '--font-serif',
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 })
 
@@ -33,7 +34,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${jakarta.variable} ${playfair.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <QueryProvider>{children}</QueryProvider>
