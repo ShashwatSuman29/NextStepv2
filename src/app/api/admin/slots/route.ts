@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import { createSlotSchema } from '@/validators/slot'
 
 /**
@@ -10,7 +10,7 @@ export async function GET() {
   const { error } = await verifyAdmin()
   if (error) return error
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const { data, error: dbError } = await supabase
     .from('counselling_slots')
     .select('*')
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
   const { error, adminDbId } = await verifyAdmin()
   if (error) return error
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const { data: adminUser } = await supabase
     .from('admin_users')
     .select('id')

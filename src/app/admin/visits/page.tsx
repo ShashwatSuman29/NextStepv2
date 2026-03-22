@@ -35,7 +35,16 @@ export default function AdminVisitsPage() {
     setLoading(false)
   }
 
-  useEffect(() => { fetchVisits() }, [filter])
+  useEffect(() => {
+    fetchVisits()
+
+    // Auto-refresh every 30s for new student visit requests
+    const interval = setInterval(() => {
+      fetchVisits()
+    }, 30000)
+    return () => clearInterval(interval)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter])
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     const res = await fetch(`/api/admin/visits/${id}`, {

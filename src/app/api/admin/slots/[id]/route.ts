@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import { updateSlotSchema } from '@/validators/slot'
 
 /**
@@ -20,7 +20,7 @@ export async function PATCH(
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
   }
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const { data, error: dbError } = await supabase
     .from('counselling_slots')
     .update(parsed.data)
@@ -43,7 +43,7 @@ export async function DELETE(
   if (error) return error
 
   const { id } = await params
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   const { count } = await supabase
     .from('counselling_bookings')

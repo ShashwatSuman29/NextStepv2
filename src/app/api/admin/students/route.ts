@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 
 /**
  * GET /api/admin/students — Paginated list. Max 50/page. Search by name/email.
@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '20'), 50)
   const search = searchParams.get('search')
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   let query = supabase
     .from('users')

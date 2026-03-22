@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import { updateBookingStatusSchema } from '@/validators/booking'
 import { dispatchNotifications } from '@/lib/notifications/dispatch'
 import { VALID_BOOKING_TRANSITIONS } from '@/types'
@@ -17,7 +17,7 @@ export async function GET(
   if (error) return error
 
   const { id } = await params
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   const { data, error: dbError } = await supabase
     .from('counselling_bookings')
@@ -46,7 +46,7 @@ export async function PATCH(
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
   }
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   // Get admin_users.id
   const { data: adminUser } = await supabase

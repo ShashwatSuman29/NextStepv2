@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 
 /**
  * GET /api/admin/bookings — All bookings. Filter by status, date.
@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   const page = parseInt(searchParams.get('page') || '1')
   const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '20'), 50)
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   let query = supabase
     .from('counselling_bookings')
     .select('*, student:users(id, email), slot:counselling_slots(slot_date, slot_time)', { count: 'exact' })

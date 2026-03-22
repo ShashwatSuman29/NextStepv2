@@ -16,11 +16,12 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const sessionClient = await createClient()
+  const { data: { user } } = await sessionClient.auth.getUser()
   if (!user) redirect('/auth/login')
 
-  const { data: dbUser } = await supabase
+  const serviceClient = createServiceClient()
+  const { data: dbUser } = await serviceClient
     .from('users')
     .select('id, role, email')
     .eq('auth_id', user.id)

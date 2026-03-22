@@ -53,6 +53,12 @@ export default function VisitsPage() {
   useEffect(() => {
     fetchVisits()
     fetchColleges()
+
+    // Auto-refresh every 30s for real-time status updates from admin
+    const interval = setInterval(() => {
+      fetchVisits()
+    }, 30000)
+    return () => clearInterval(interval)
   }, [])
 
   const handleRequest = async () => {

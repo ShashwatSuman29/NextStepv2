@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 
 /**
  * GET /api/admin/metrics — Dashboard metrics.
@@ -9,7 +9,7 @@ export async function GET() {
   const { error } = await verifyAdmin()
   if (error) return error
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   const [students, bookings, visits, colleges] = await Promise.all([
     supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'student'),

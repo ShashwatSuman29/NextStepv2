@@ -1,11 +1,13 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
 export default async function DashboardPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const sessionClient = await createClient()
+  const { data: { user } } = await sessionClient.auth.getUser()
   if (!user) redirect('/auth/login')
+
+  const supabase = createServiceClient()
 
   const { data: dbUser } = await supabase
     .from('users')
@@ -57,14 +59,14 @@ export default async function DashboardPage() {
       value: bookings.length,
       icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
       color: 'bg-primary-light text-primary',
-      href: '/dashboard',
+      href: '/dashboard/bookings',
     },
     {
       label: 'Visit Requests',
       value: visits.length,
       icon: 'M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z',
       color: 'bg-surface-warm text-amber-700',
-      href: '/dashboard',
+      href: '/dashboard/visits',
     },
     {
       label: 'Saved Colleges',
@@ -120,7 +122,7 @@ export default async function DashboardPage() {
             <h2 className="text-lg font-bold text-foreground" style={{ fontFamily: 'var(--font-sans)' }}>
               Recent Bookings
             </h2>
-            <Link href="/dashboard" className="text-xs font-semibold text-primary hover:text-primary-dark transition-colors">
+            <Link href="/dashboard/bookings" className="text-xs font-semibold text-primary hover:text-primary-dark transition-colors">
               View all
             </Link>
           </div>

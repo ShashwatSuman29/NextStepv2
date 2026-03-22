@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import { updateVisitStatusSchema } from '@/validators/visit'
 import { dispatchNotifications } from '@/lib/notifications/dispatch'
 import { VALID_VISIT_TRANSITIONS } from '@/types'
@@ -23,7 +23,7 @@ export async function PATCH(
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
   }
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   const { data: adminUser } = await supabase
     .from('admin_users')

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import { createCollegeSchema } from '@/validators/college'
 
 /**
@@ -10,7 +10,7 @@ export async function GET() {
   const { error } = await verifyAdmin()
   if (error) return error
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const { data, error: dbError } = await supabase
     .from('colleges')
     .select('*, college_courses(count)')
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   const { error, adminDbId } = await verifyAdmin()
   if (error) return error
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   // Get admin_users.id from users.id
   const { data: adminUser } = await supabase

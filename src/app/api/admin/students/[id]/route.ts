@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 
 /**
  * GET /api/admin/students/[id] — Single student profile.
@@ -13,7 +13,7 @@ export async function GET(
   if (error) return error
 
   const { id } = await params
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   const { data, error: dbError } = await supabase
     .from('users')

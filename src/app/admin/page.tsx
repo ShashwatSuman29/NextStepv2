@@ -23,13 +23,21 @@ export default function AdminDashboard() {
   const [metrics, setMetrics] = useState<Metrics | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
+  const fetchMetrics = () => {
     fetch('/api/admin/metrics')
       .then((r) => r.json())
       .then((d) => {
         setMetrics(d.data)
         setLoading(false)
       })
+  }
+
+  useEffect(() => {
+    fetchMetrics()
+
+    // Auto-refresh every 30s
+    const interval = setInterval(fetchMetrics, 30000)
+    return () => clearInterval(interval)
   }, [])
 
   if (loading) {

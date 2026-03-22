@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import type { NotificationType } from '@/types'
 
 const NOTIFICATION_MESSAGES: Record<NotificationType, string> = {
@@ -27,7 +27,7 @@ export async function dispatchNotifications(
   type: NotificationType,
   referenceId: string
 ) {
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const message = buildMessage(type)
 
   // 1. in_app: synchronous
@@ -59,7 +59,7 @@ async function sendEmailNotification(
     return
   }
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   // Look up student email
   const { data: user } = await supabase

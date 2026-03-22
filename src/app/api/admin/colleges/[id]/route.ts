@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
-import { createClient } from '@/lib/supabase/server'
+import { createServiceClient } from '@/lib/supabase/server'
 import { updateCollegeSchema } from '@/validators/college'
 
 /**
@@ -20,7 +20,7 @@ export async function PATCH(
     return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
   }
 
-  const supabase = await createClient()
+  const supabase = createServiceClient()
   const { data, error: dbError } = await supabase
     .from('colleges')
     .update(parsed.data)
@@ -43,7 +43,7 @@ export async function DELETE(
   if (error) return error
 
   const { id } = await params
-  const supabase = await createClient()
+  const supabase = createServiceClient()
 
   // Check for pending bookings referencing this college
   const { count: pendingBookings } = await supabase

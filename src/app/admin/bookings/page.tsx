@@ -36,7 +36,16 @@ export default function AdminBookingsPage() {
     setLoading(false)
   }
 
-  useEffect(() => { fetchBookings() }, [filter])
+  useEffect(() => {
+    fetchBookings()
+
+    // Auto-refresh every 30s for new student bookings
+    const interval = setInterval(() => {
+      fetchBookings()
+    }, 30000)
+    return () => clearInterval(interval)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter])
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     const res = await fetch(`/api/admin/bookings/${id}`, {

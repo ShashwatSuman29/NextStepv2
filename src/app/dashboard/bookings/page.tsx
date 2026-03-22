@@ -54,6 +54,12 @@ export default function BookingsPage() {
   useEffect(() => {
     fetchBookings()
     fetchSlots()
+
+    // Auto-refresh every 30s for real-time status updates from admin
+    const interval = setInterval(() => {
+      fetchBookings()
+    }, 30000)
+    return () => clearInterval(interval)
   }, [])
 
   const handleBook = async () => {
