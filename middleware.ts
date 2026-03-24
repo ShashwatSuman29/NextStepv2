@@ -26,8 +26,10 @@ export async function middleware(request: NextRequest) {
   )
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
+  
+  const user = session?.user
 
   const path = request.nextUrl.pathname
 
@@ -38,50 +40,30 @@ export async function middleware(request: NextRequest) {
 
   // ---- Authenticated user on /auth/login → redirect away ----
   if (path.startsWith('/auth/login') && user) {
-    const { data } = await supabase
-      .from('users')
-      .select('role')
-      .eq('auth_id', user.id)
-      .single()
+    const role = user.app_metadata?.role || 'student'
 
-    if (data?.role === 'admin') {
+    if (role === 'admin') {
       return NextResponse.redirect(new URL('/admin', request.url))
     }
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  // ---- Admin route protection: verify role from DB — NEVER from user_metadata ----
+  // ---- Admin route protection: verify role from JWT ----
   if (path.startsWith('/admin') && user) {
-    const { data } = await supabase
-      .from('users')
-      .select('role')
-      .eq('auth_id', user.id)
-      .single()
+    const role = user.app_metadata?.role || 'student'
 
-    if (!data || data.role !== 'admin') {
+    if (role !== 'admin') {
       return NextResponse.redirect(new URL('/dashboard', request.url))
     }
   }
 
-  // ---- is_complete check for /dashboard/* (except exempt routes) ----
+  // ---- is_complete check for /dashboard/* from JWT ----
   const exempt = ['/dashboard/settings', '/dashboard/saved', '/onboarding']
   if (path.startsWith('/dashboard') && user && !exempt.some((e) => path.startsWith(e))) {
-    const { data: u } = await supabase
-      .from('users')
-      .select('id')
-      .eq('auth_id', user.id)
-      .single()
+    const isComplete = user.user_metadata?.is_complete === true
 
-    if (u) {
-      const { data: prof } = await supabase
-        .from('student_profiles')
-        .select('is_complete')
-        .eq('user_id', u.id)
-        .single()
-
-      if (!prof || !prof.is_complete) {
-        return NextResponse.redirect(new URL('/onboarding', request.url))
-      }
+    if (!isComplete) {
+      return NextResponse.redirect(new URL('/onboarding', request.url))
     }
   }
 

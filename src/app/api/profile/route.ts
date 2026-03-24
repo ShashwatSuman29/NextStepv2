@@ -116,6 +116,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
+  await supabase.auth.updateUser({ data: { is_complete } })
+
   return NextResponse.json({ data: profile }, { status: 201 })
 }
 
@@ -175,6 +177,8 @@ export async function PATCH(request: Request) {
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
+
+  await supabase.auth.updateUser({ data: { is_complete } })
 
   return NextResponse.json({ data: profile })
 }

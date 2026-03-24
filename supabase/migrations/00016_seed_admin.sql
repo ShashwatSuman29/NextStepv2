@@ -6,13 +6,13 @@
 -- Step 2: Run the following SQL (replace placeholders):
 --
 -- INSERT INTO public.users (auth_id, email, role, is_verified)
--- VALUES ('<supabase-auth-uid>', 'admin@nextstep.in', 'admin', true)
+-- VALUES ('<supabase-auth-uid>', 'admin@example.com', 'admin', true)
 -- RETURNING id;
 --
 -- Step 3: Use the id returned above:
 --
 -- INSERT INTO public.admin_users (user_id, full_name, email)
--- VALUES ('<users.id-from-above>', 'Admin Name', 'admin@nextstep.in');
+-- VALUES ('<users.id-from-above>', 'Admin Name', 'admin@example.com');
 --
 -- ============================================================
 -- IMPORTANT: No API route can set role='admin'.

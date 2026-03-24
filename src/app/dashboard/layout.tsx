@@ -14,30 +14,32 @@ export default async function DashboardLayout({
 
   if (!user) redirect('/auth/login')
 
-  const admin = createServiceClient()
-
-  const { data: dbUser } = await admin
+  const { data: dbUser } = await supabase
     .from('users')
     .select('id, email, role')
     .eq('auth_id', user.id)
     .single()
 
-  const { data: profile } = dbUser
-    ? await admin
-        .from('student_profiles')
-        .select('full_name')
-        .eq('user_id', dbUser.id)
-        .single()
-    : { data: null }
+  const [profileRes, notifRes] = await Promise.all([
+    dbUser
+      ? supabase
+          .from('student_profiles')
+          .select('full_name')
+          .eq('user_id', dbUser.id)
+          .single()
+      : { data: null },
+    dbUser
+      ? supabase
+          .from('notifications')
+          .select('*', { count: 'exact', head: true })
+          .eq('student_id', dbUser.id)
+          .eq('channel', 'in_app')
+          .eq('is_read', false)
+      : { count: 0 },
+  ])
 
-  const { count: unreadCount } = dbUser
-    ? await admin
-        .from('notifications')
-        .select('*', { count: 'exact', head: true })
-        .eq('student_id', dbUser.id)
-        .eq('channel', 'in_app')
-        .eq('is_read', false)
-    : { count: 0 }
+  const profile = profileRes.data
+  const unreadCount = notifRes.count
 
   const navLinks = [
     { href: '/colleges', label: 'Colleges', icon: 'M12 14l9-5-9-5-9 5 9 5zM12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z' },

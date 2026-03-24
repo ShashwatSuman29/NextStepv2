@@ -55,7 +55,7 @@ async function seed() {
   } else {
     // Create auth user for admin
     const { data: authAdmin, error: authErr } = await sb.auth.admin.createUser({
-      email: 'admin@nextstep.in',
+      email: 'admin@example.com',
       password: 'Admin@NextStep2024!',
       email_confirm: true,
     })
@@ -64,18 +64,18 @@ async function seed() {
       // If user already exists in auth, find their auth_id
       if (authErr.message.includes('already been registered')) {
         const { data: { users } } = await sb.auth.admin.listUsers()
-        const found = users.find(u => u.email === 'admin@nextstep.in')
+        const found = users.find(u => u.email === 'admin@example.com')
         if (found) {
           // Insert into public.users
           const { data: inserted, error: insertErr } = await sb.from('users').insert({
             auth_id: found.id,
-            email: 'admin@nextstep.in',
+            email: 'admin@example.com',
             role: 'admin',
             is_verified: true,
           }).select('id').single()
           if (insertErr) {
             console.log('   Admin user record may already exist, checking...')
-            const { data: existing2 } = await sb.from('users').select('id').eq('email', 'admin@nextstep.in').single()
+            const { data: existing2 } = await sb.from('users').select('id').eq('email', 'admin@example.com').single()
             adminDbId = existing2?.id
           } else {
             adminDbId = inserted.id
@@ -89,7 +89,7 @@ async function seed() {
       // Insert into public.users
       const { data: adminUser, error: uErr } = await sb.from('users').insert({
         auth_id: authAdmin.user.id,
-        email: 'admin@nextstep.in',
+        email: 'admin@example.com',
         role: 'admin',
         is_verified: true,
       }).select('id').single()
@@ -116,7 +116,7 @@ async function seed() {
     const { data: au, error: auErr } = await sb.from('admin_users').insert({
       user_id: adminDbId,
       full_name: 'NextStep Admin',
-      email: 'admin@nextstep.in',
+      email: 'admin@example.com',
     }).select('id').single()
 
     if (auErr) {
@@ -240,7 +240,7 @@ async function seed() {
 
   console.log('\n✅ Seed complete!')
   console.log('\n📋 Admin credentials:')
-  console.log('   Email: admin@nextstep.in')
+  console.log('   Email: admin@example.com')
   console.log('   Password: Admin@NextStep2024!')
   console.log('   (Use these to log into the admin panel)')
 }
