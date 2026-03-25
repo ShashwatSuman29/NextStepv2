@@ -88,12 +88,15 @@ async function sendEmailNotification(
   try {
     const { Resend } = await import('resend')
     const resend = new Resend(resendKey)
+    const { getNotificationEmailHtml } = await import('./template')
 
     await resend.emails.send({
       from: 'YourNextStep <updates@auth.yournextstep.me>',
+      replyTo: 'hello.yournextstep@gmail.com',
       to: user.email,
       subject: `YourNextStep — ${message}`,
       text: message,
+      html: getNotificationEmailHtml(message),
     })
 
     // Mark as sent

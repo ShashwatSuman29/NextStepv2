@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
 
             <section className="space-y-3">
               <h2 className="text-xl font-semibold text-foreground mt-8">5. Contact Us</h2>
-              <p>If you have any questions about this Privacy Policy, please contact us at hello@nextstep.in.</p>
+              <p>If you have any questions about this Privacy Policy, please contact us at hello.yournextstep@gmail.com.</p>
             </section>
           </div>
         </div>
