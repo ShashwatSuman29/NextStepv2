@@ -260,7 +260,7 @@ export function CollegeDetailClient({
         <AnimatedSection delay={0.2} className="mt-6">
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link
-              href={isLoggedIn ? '/dashboard/bookings' : '/auth/login'}
+              href={isLoggedIn ? `/dashboard/bookings?college_id=${c.id}` : '/auth/login'}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -269,7 +269,7 @@ export function CollegeDetailClient({
               Book Counselling
             </Link>
             <Link
-              href={isLoggedIn ? '/dashboard/visits' : '/auth/login'}
+              href={isLoggedIn ? `/dashboard/visits?college_id=${c.id}` : '/auth/login'}
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-border px-6 py-3 text-sm font-semibold text-foreground transition-all duration-300 hover:bg-accent hover:shadow-soft"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">

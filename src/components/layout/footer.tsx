@@ -16,7 +16,7 @@ export function Footer() {
                 NextStep
               </span>
             </div>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-4 hidden md:block max-w-xs text-sm leading-relaxed text-muted-foreground">
               Helping Indian students navigate college admissions with structured guidance,
               expert counselling, and organized campus visits.
             </p>
@@ -34,7 +34,7 @@ export function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="hidden md:block">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
                 style={{ fontFamily: 'var(--font-sans)' }}>
               Explore
@@ -58,7 +58,7 @@ export function Footer() {
           </div>
 
           {/* Resources */}
-          <div>
+          <div className="hidden md:block">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
                 style={{ fontFamily: 'var(--font-sans)' }}>
               For Students

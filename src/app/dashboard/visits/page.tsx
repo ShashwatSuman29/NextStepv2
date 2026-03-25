@@ -76,6 +76,17 @@ export default function VisitsPage() {
   useEffect(() => {
     fetchVisits()
     fetchColleges()
+    
+    // Auto-select college if passed in URL context
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const collegeId = params.get('college_id')
+      if (collegeId) {
+        setSelectedCollege(collegeId)
+        setShowForm(true)
+      }
+    }
+
     const interval = setInterval(() => { fetchVisits() }, 30000)
     return () => clearInterval(interval)
   }, [])
