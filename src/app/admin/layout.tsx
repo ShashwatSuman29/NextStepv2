@@ -32,32 +32,33 @@ export default async function AdminLayout({
   if (!dbUser || dbUser.role !== 'admin') redirect('/dashboard')
 
   const adminName = dbUser.email?.split('@')[0] ?? 'Admin'
+  const adminInitial = adminName.charAt(0).toUpperCase()
 
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
+      {/* Sidebar — desktop only */}
       <aside className="hidden w-64 flex-col border-r border-border/60 bg-card md:flex">
-        <div className="flex h-16 items-center border-b border-border/60 px-5">
+        <div className="flex h-14 items-center border-b border-border/60 px-5">
           <Link href="/admin" className="flex items-center gap-0 group">
-            <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-ml-2 -mr-5 md:-mr-6 h-14 md:h-16 w-auto object-contain transition-transform group-hover:scale-105" />
+            <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-ml-2 -mr-5 h-12 w-auto object-contain transition-transform group-hover:scale-105" />
             <div className="flex items-center gap-1.5">
-              <span className="text-lg md:text-xl font-bold text-foreground" style={{ fontFamily: 'var(--font-serif)' }}>
+              <span className="text-lg font-bold text-foreground" style={{ fontFamily: 'var(--font-serif)' }}>
                 NextStep
               </span>
-              <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary uppercase tracking-wider">Admin</span>
+              <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary uppercase tracking-wider">Admin</span>
             </div>
           </Link>
         </div>
 
-        <nav className="flex-1 space-y-1 px-3 py-5">
-          <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Navigation</p>
+        <nav className="flex-1 space-y-0.5 px-3 py-5">
+          <p className="mb-3 px-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">Navigation</p>
           {sidebarLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-primary/5 hover:text-primary"
+              className="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium text-muted-foreground transition-all duration-200 hover:bg-primary/5 hover:text-primary"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0 transition-colors group-hover:text-primary">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" className="shrink-0 transition-colors group-hover:text-primary">
                 <path d={item.icon} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               {item.label}
@@ -67,8 +68,8 @@ export default async function AdminLayout({
 
         <div className="border-t border-border/60 p-4">
           <div className="flex items-center gap-3 rounded-xl bg-accent/40 p-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark text-xs font-bold text-white shadow-sm">
-              {adminName.charAt(0).toUpperCase()}
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-[10px] font-bold text-white">
+              {adminInitial}
             </div>
             <div className="flex-1 min-w-0">
               <p className="truncate text-sm font-semibold text-foreground">{adminName}</p>
@@ -83,22 +84,39 @@ export default async function AdminLayout({
 
       {/* Main content */}
       <div className="flex flex-1 flex-col">
-        {/* Mobile header */}
-        <header className="flex h-16 items-center justify-between border-b border-border/60 bg-card px-5 md:hidden">
-          <Link href="/admin" className="flex items-center gap-0">
-            <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-ml-2 -mr-3 md:-mr-4 h-10 md:h-12 w-auto object-contain" />
-            <span className="text-sm font-bold text-foreground">NextStep</span>
-            <span className="mt-0.5 rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary uppercase tracking-wider">Admin</span>
-          </Link>
-          <LogoutButton />
-        </header>
-        {/* Mobile nav */}
-        <div className="flex items-center gap-1 overflow-x-auto border-b border-border/40 bg-card px-5 py-2 md:hidden">
+        {/* Mobile capsule header */}
+        <div className="sticky top-0 z-50 flex justify-center px-3 pt-2.5 pb-1.5 bg-muted/50 md:hidden">
+          <header
+            className="w-full rounded-full border border-border/30 px-3 py-1.5 shadow-soft"
+            style={{
+              background: 'rgba(255,255,255,0.88)',
+              backdropFilter: 'blur(24px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <Link href="/admin" className="flex items-center gap-0 pl-1 shrink-0">
+                <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-mr-3 h-9 w-auto object-contain" />
+                <span className="text-sm font-bold text-foreground" style={{ fontFamily: 'var(--font-serif)' }}>NextStep</span>
+                <span className="ml-1.5 rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-bold text-primary uppercase tracking-wider">Admin</span>
+              </Link>
+              <div className="flex items-center gap-1.5">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-[10px] font-bold text-white">
+                  {adminInitial}
+                </div>
+                <LogoutButton />
+              </div>
+            </div>
+          </header>
+        </div>
+
+        {/* Mobile nav tabs */}
+        <div className="flex items-center gap-1 overflow-x-auto border-b border-border/30 bg-card/60 px-3 py-2 md:hidden" style={{ backdropFilter: 'blur(12px)' }}>
           {sidebarLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-primary/5 hover:text-primary transition-colors"
+              className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
             >
               {item.label}
             </Link>

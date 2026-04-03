@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { createClient } from '@/lib/supabase/client'
 import { Navbar } from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
 import { AnimatedSection, StaggerContainer, StaggerItem } from '@/components/shared/animated-section'
@@ -11,6 +10,7 @@ import { FeatureCard } from '@/components/shared/feature-card'
 import { StatCounter } from '@/components/shared/stat-counter'
 import { TestimonialCarousel } from '@/components/shared/testimonial-carousel'
 import { CollegeCard } from '@/components/shared/college-card'
+import RotatingText from '@/components/shared/rotating-text'
 
 interface FeaturedCollege {
   id: string
@@ -30,17 +30,9 @@ interface FeaturedCollege {
 }
 
 export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const { scrollYProgress } = useScroll()
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0])
   const heroY = useTransform(scrollYProgress, [0, 0.2], [0, 40])
-
-  useEffect(() => {
-    const supabase = createClient()
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setIsLoggedIn(!!session?.user)
-    })
-  }, [])
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -81,7 +73,7 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
               </span>
             </motion.div>
 
-            {/* Heading */}
+            {/* Heading with rotating text */}
             <motion.h1
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
@@ -90,9 +82,18 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
               style={{ fontFamily: 'var(--font-serif)' }}
             >
               Your college journey,{' '}
-              <span className="relative inline-block">
-                <span className="bg-gradient-to-r from-white via-gold to-secondary bg-clip-text text-transparent">simplified</span>
-              </span>
+              <RotatingText
+                texts={['simplified', 'sorted', 'streamlined', 'secured']}
+                mainClassName="px-3 sm:px-4 md:px-5 bg-gradient-to-r from-gold to-secondary text-white overflow-hidden py-1 sm:py-1.5 md:py-2 justify-center rounded-xl inline-flex"
+                staggerFrom="last"
+                initial={{ y: '100%' }}
+                animate={{ y: 0 }}
+                exit={{ y: '-120%' }}
+                staggerDuration={0.025}
+                splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                transition={{ type: 'spring', damping: 30, stiffness: 400 }}
+                rotationInterval={2500}
+              />
             </motion.h1>
 
             {/* Subtitle */}
@@ -114,10 +115,10 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
               className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
             >
               <Link
-                href={isLoggedIn ? '/dashboard' : '/auth/login'}
+                href="/auth/login"
                 className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-white px-8 py-3.5 text-[15px] font-semibold text-primary-dark shadow-lg shadow-black/10 transition-all duration-300 hover:shadow-xl hover:shadow-black/15 hover:-translate-y-0.5 active:translate-y-0"
               >
-                {isLoggedIn ? 'Go to Dashboard' : 'Get started'}
+                Get started
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:translate-x-0.5">
                   <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -226,12 +227,12 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
           </motion.div>
         </motion.div>
 
-        {/* Bottom fade — smooth transition */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+        {/* Solid end of hero section */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-border/30" />
       </section>
 
       {/* ============ FEATURES — Stripe bento style ============ */}
-      <section className="relative py-32 px-6">
+      <section className="relative py-32 px-6 border-t border-border/30">
         <div className="absolute inset-0 mesh-gradient" />
 
         <div className="relative mx-auto max-w-6xl">
@@ -428,10 +429,10 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
       )}
 
       {/* ============ TESTIMONIALS ============ */}
-      <section className="relative border-t border-border/40 py-32 px-6">
+      <section className="relative border-t border-border/40 py-32 overflow-hidden">
         <div className="absolute inset-0 mesh-gradient opacity-30" />
 
-        <div className="relative mx-auto max-w-4xl">
+        <div className="relative mx-auto max-w-4xl px-6">
           <AnimatedSection className="text-center">
             <span className="inline-block rounded-full border border-primary/15 bg-primary/[0.04] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
               Student Stories
@@ -440,11 +441,11 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
               Hear from students who<br className="hidden sm:block" /> found their path
             </h2>
           </AnimatedSection>
-
-          <AnimatedSection delay={0.2} className="mt-14">
-            <TestimonialCarousel />
-          </AnimatedSection>
         </div>
+
+        <AnimatedSection delay={0.2} className="relative mt-14">
+          <TestimonialCarousel />
+        </AnimatedSection>
       </section>
 
       {/* ============ CTA — Stripe-style final section ============ */}
@@ -475,10 +476,10 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href={isLoggedIn ? '/dashboard' : '/auth/login'}
+              href="/auth/login"
               className="group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[15px] font-semibold text-primary-dark shadow-lg shadow-black/10 transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
             >
-              {isLoggedIn ? 'Go to Dashboard' : 'Start your journey'}
+              Start your journey
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform group-hover:translate-x-0.5">
                 <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

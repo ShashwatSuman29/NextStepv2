@@ -1,9 +1,5 @@
 'use client'
 
-import { useEffect, useCallback, useState } from 'react'
-import useEmblaCarousel from 'embla-carousel-react'
-import Autoplay from 'embla-carousel-autoplay'
-
 const testimonials = [
   {
     quote: "NextStep made my college search so much easier. The counselling sessions were incredibly helpful in narrowing down my choices.",
@@ -29,96 +25,64 @@ const testimonials = [
     detail: "B.Tech ME, IIT Dhanbad",
     initial: "R",
   },
+  {
+    quote: "The college comparison tool saved me weeks of research. I could see fees, placements, and facilities side by side instantly.",
+    name: "Ananya Singh",
+    detail: "B.Sc Data Science, BITS Pilani",
+    initial: "A",
+  },
+  {
+    quote: "My counsellor understood exactly what I was looking for and guided me to the perfect fit. NextStep is a must for every aspirant.",
+    name: "Vikram Joshi",
+    detail: "MBA, IIM Indore",
+    initial: "V",
+  },
 ]
 
-export function TestimonialCarousel() {
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: 'center' },
-    [Autoplay({ delay: 5000, stopOnInteraction: false })]
-  )
-  const [selectedIndex, setSelectedIndex] = useState(0)
-
-  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi])
-  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi])
-
-  useEffect(() => {
-    if (!emblaApi) return
-    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap())
-    emblaApi.on('select', onSelect)
-    return () => { emblaApi.off('select', onSelect) }
-  }, [emblaApi])
-
+function TestimonialCard({ t }: { t: typeof testimonials[0] }) {
   return (
-    <div className="relative">
-      <div className="embla" ref={emblaRef}>
-        <div className="embla__container">
-          {testimonials.map((t, i) => (
-            <div key={i} className="embla__slide px-4 md:px-12">
-              <div className="mx-auto max-w-2xl rounded-2xl border border-border/40 bg-card p-8 md:p-10 shadow-soft">
-                {/* Stars */}
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, j) => (
-                    <svg key={j} width="16" height="16" viewBox="0 0 24 24" fill="var(--gold)" className="text-gold">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                  ))}
-                </div>
-
-                <blockquote
-                  className="mt-5 text-lg leading-relaxed text-foreground md:text-xl"
-                  style={{ fontFamily: 'var(--font-serif)' }}
-                >
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-
-                <div className="mt-6 flex items-center gap-3 border-t border-border/30 pt-5">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-sm font-bold text-white">
-                    {t.initial}
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">{t.name}</p>
-                    <p className="text-xs text-muted-foreground">{t.detail}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+    <div className="w-[340px] shrink-0 rounded-2xl border border-border/50 bg-card p-6 shadow-soft mx-3 select-none">
+      {/* Stars */}
+      <div className="flex gap-0.5">
+        {[...Array(5)].map((_, j) => (
+          <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="var(--gold)" className="text-gold">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        ))}
       </div>
 
-      {/* Navigation */}
-      <div className="mt-8 flex items-center justify-center gap-4">
-        <button
-          onClick={scrollPrev}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card shadow-soft transition-all hover:shadow-lifted hover:border-primary/20"
-          aria-label="Previous testimonial"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
+      <blockquote className="mt-4 text-[15px] leading-relaxed text-foreground/85 line-clamp-4">
+        &ldquo;{t.quote}&rdquo;
+      </blockquote>
 
-        {/* Dot indicators */}
-        <div className="flex gap-2">
-          {testimonials.map((_, i) => (
-            <div
-              key={i}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === selectedIndex ? 'w-6 bg-primary' : 'w-1.5 bg-border'
-              }`}
-            />
-          ))}
+      <div className="mt-5 flex items-center gap-3 border-t border-border/30 pt-4">
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary-dark text-xs font-bold text-white">
+          {t.initial}
         </div>
+        <div>
+          <p className="text-sm font-semibold text-foreground">{t.name}</p>
+          <p className="text-xs text-muted-foreground">{t.detail}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
 
-        <button
-          onClick={scrollNext}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card shadow-soft transition-all hover:shadow-lifted hover:border-primary/20"
-          aria-label="Next testimonial"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
+export function TestimonialCarousel() {
+  // Duplicate testimonials for seamless infinite loop
+  const items = [...testimonials, ...testimonials]
+
+  return (
+    <div className="relative overflow-hidden">
+      {/* Fade edges */}
+      <div className="pointer-events-none absolute left-0 top-0 bottom-0 z-10 w-20 bg-gradient-to-r from-background to-transparent" />
+      <div className="pointer-events-none absolute right-0 top-0 bottom-0 z-10 w-20 bg-gradient-to-l from-background to-transparent" />
+
+      {/* Scrolling row */}
+      <div className="flex animate-marquee hover:[animation-play-state:paused]">
+        {items.map((t, i) => (
+          <TestimonialCard key={i} t={t} />
+        ))}
       </div>
     </div>
   )

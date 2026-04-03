@@ -16,7 +16,6 @@ export async function GET(
     .select('*, college_courses(*)')
     .eq('id', id)
     .eq('status', 'active')
-    .eq('is_deleted', false)
     .single()
 
   if (error || !college) {

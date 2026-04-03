@@ -33,7 +33,7 @@ export async function PATCH(
 }
 
 /**
- * DELETE /api/admin/colleges/[id] — Soft delete. Blocked if active visits/bookings.
+ * DELETE /api/admin/colleges/[id] — Hard delete college and all related data.
  */
 export async function DELETE(
   _request: Request,
@@ -45,31 +45,39 @@ export async function DELETE(
   const { id } = await params
   const supabase = createServiceClient()
 
-  // Check for pending bookings referencing this college
-  const { count: pendingBookings } = await supabase
-    .from('counselling_bookings')
-    .select('*', { count: 'exact', head: true })
-    .eq('context_college_id', id)
-    .in('status', ['pending', 'confirmed'])
+  // Delete all related data first (cascade)
+  // 1. Delete saved_colleges entries
+  await supabase.from('saved_colleges').delete().eq('college_id', id)
 
-  const { count: pendingVisits } = await supabase
-    .from('college_visits')
-    .select('*', { count: 'exact', head: true })
+  // 2. Delete college_visits
+  await supabase.from('college_visits').delete().eq('college_id', id)
+
+  // 3. Delete counselling_bookings that reference this college via slots
+  const { data: slots } = await supabase
+    .from('counselling_slots')
+    .select('id')
     .eq('college_id', id)
-    .in('status', ['pending', 'confirmed'])
 
-  if ((pendingBookings ?? 0) > 0 || (pendingVisits ?? 0) > 0) {
-    return NextResponse.json(
-      { error: 'Cancel all pending activity before deleting.' },
-      { status: 400 }
-    )
+  if (slots && slots.length > 0) {
+    const slotIds = slots.map(s => s.id)
+    await supabase.from('counselling_bookings').delete().in('slot_id', slotIds)
   }
 
+  // Also delete bookings that reference this college directly
+  await supabase.from('counselling_bookings').delete().eq('context_college_id', id)
+
+  // 4. Delete counselling_slots for this college
+  await supabase.from('counselling_slots').delete().eq('college_id', id)
+
+  // 5. Delete college_courses
+  await supabase.from('college_courses').delete().eq('college_id', id)
+
+  // 6. Finally delete the college itself
   const { error: dbError } = await supabase
     .from('colleges')
-    .update({ is_deleted: true })
+    .delete()
     .eq('id', id)
 
   if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 })
-  return NextResponse.json({ message: 'College soft-deleted' })
+  return NextResponse.json({ message: 'College permanently deleted' })
 }

@@ -15,7 +15,7 @@ export async function GET() {
     supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'student'),
     supabase.from('counselling_bookings').select('status'),
     supabase.from('college_visits').select('status'),
-    supabase.from('colleges').select('*', { count: 'exact', head: true }).eq('is_deleted', false),
+    supabase.from('colleges').select('*', { count: 'exact', head: true }),
     supabase.from('payment_transactions').select('amount_inr').eq('status', 'success'),
   ])
   

@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { NotificationBell } from '@/components/layout/notification-bell'
 import { ProfileDropdown } from '@/components/layout/profile-dropdown'
 
 export default async function DashboardLayout({
@@ -42,12 +41,11 @@ export default async function DashboardLayout({
   const unreadCount = notifRes.count
 
   const navLinks = [
-    { href: '/colleges', label: 'Colleges', icon: 'M12 14l9-5-9-5-9 5 9 5zM12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z' },
-    { href: '/dashboard/bookings', label: 'Bookings', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
-    { href: '/dashboard/visits', label: 'Visits', icon: 'M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' },
-    { href: '/dashboard/saved', label: 'Saved', icon: 'M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z' },
-    { href: '/dashboard/settings', label: 'Settings', icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z' },
-    { href: '/dashboard', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+    { href: '/colleges', label: 'Colleges' },
+    { href: '/dashboard/bookings', label: 'Bookings' },
+    { href: '/dashboard/visits', label: 'Visits' },
+    { href: '/dashboard/saved', label: 'Saved' },
+    { href: '/dashboard', label: 'Dashboard' },
   ]
 
   const displayName = profile?.full_name || dbUser?.email?.split('@')[0] || 'User'
@@ -56,69 +54,87 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Top nav */}
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-card/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
-          <Link href="/" className="flex items-center gap-0 group">
-            <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-ml-2 -mr-5 md:-mr-6 h-14 md:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
-            <span className="text-lg md:text-xl font-bold text-foreground transition-colors" style={{ fontFamily: 'var(--font-serif)' }}>
-              NextStep
-            </span>
-          </Link>
-
-          <nav className="hidden items-center gap-0.5 md:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="group flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-primary/5 hover:text-primary"
+      {/* Capsule navbar */}
+      <div className="sticky top-0 z-50 flex justify-center px-4 pt-3 pb-2 bg-muted/50">
+        <header
+          className="w-full max-w-5xl rounded-full border border-border/30 px-3 py-1.5 shadow-soft"
+          style={{
+            background: 'rgba(255,255,255,0.88)',
+            backdropFilter: 'blur(24px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          }}
+        >
+          <div className="flex items-center justify-between">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-0 pl-1 shrink-0 group transition-transform duration-300 hover:scale-[1.02]">
+              <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-mr-4 md:-mr-5 h-10 md:h-11 w-auto object-contain transition-transform group-hover:scale-105" />
+              <span
+                className="text-base md:text-lg font-bold tracking-tight text-foreground"
+                style={{ fontFamily: 'var(--font-serif)' }}
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 transition-colors group-hover:text-primary">
-                  <path d={link.icon} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                NextStep
+              </span>
+            </Link>
+
+            {/* Desktop nav links */}
+            <nav className="hidden items-center gap-0.5 md:flex">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-full px-3.5 py-1.5 text-[13px] font-medium text-muted-foreground transition-all duration-200 hover:text-foreground hover:bg-accent"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Right side — Notification + Profile */}
+            <div className="flex items-center gap-1.5">
+              {/* Notification bell */}
+              <Link
+                href="/dashboard/notifications"
+                className="relative flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground transition-all duration-200 hover:bg-accent hover:text-foreground"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                {link.label}
+                {(unreadCount ?? 0) > 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-destructive px-0.5 text-[9px] font-bold text-white animate-pulse">
+                    {unreadCount}
+                  </span>
+                )}
               </Link>
-            ))}
-          </nav>
 
-          <div className="flex items-center gap-2">
-            {/* Notification bell */}
-            <Link href="/dashboard/notifications" className="relative flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-all duration-200 hover:bg-primary/5 hover:text-primary">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              {(unreadCount ?? 0) > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-white animate-pulse">
-                  {unreadCount}
-                </span>
-              )}
-            </Link>
-
-            {/* Profile dropdown */}
-            <ProfileDropdown
-              displayName={displayName}
-              email={email}
-              initials={initials}
-            />
+              {/* Profile dropdown */}
+              <ProfileDropdown
+                displayName={displayName}
+                email={email}
+                initials={initials}
+              />
+            </div>
           </div>
-        </div>
+        </header>
+      </div>
 
-        {/* Mobile nav */}
-        <div className="flex items-center gap-1 overflow-x-auto border-t border-border/40 px-4 py-2 md:hidden">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-primary/5 hover:text-primary"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path d={link.icon} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      </header>
+      {/* Mobile nav tabs — scrollable */}
+      <div className="flex items-center gap-1 overflow-x-auto border-b border-border/30 bg-card/60 px-4 py-2 md:hidden" style={{ backdropFilter: 'blur(12px)' }}>
+        {navLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="flex shrink-0 items-center rounded-full px-3.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          >
+            {link.label}
+          </Link>
+        ))}
+        <Link
+          href="/dashboard/settings"
+          className="flex shrink-0 items-center rounded-full px-3.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        >
+          Settings
+        </Link>
+      </div>
 
       <main className="flex-1 bg-muted/50">{children}</main>
     </div>

@@ -69,11 +69,11 @@ export async function POST(request: Request) {
   // Check college is active
   const { data: college } = await supabase
     .from('colleges')
-    .select('id, daily_visit_capacity, status, is_deleted')
+    .select('id, daily_visit_capacity, status')
     .eq('id', college_id)
     .single()
 
-  if (!college || college.status !== 'active' || college.is_deleted) {
+  if (!college || college.status !== 'active') {
     return NextResponse.json({ error: 'College not found or inactive' }, { status: 404 })
   }
 

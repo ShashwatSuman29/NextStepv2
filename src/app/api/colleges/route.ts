@@ -31,7 +31,6 @@ export async function GET(request: Request) {
     .from('colleges')
     .select(selectQuery, { count: 'exact' })
     .eq('status', 'active')
-    .eq('is_deleted', false)
 
   if (city) query = query.eq('city', city)
   if (state) query = query.eq('state', state)

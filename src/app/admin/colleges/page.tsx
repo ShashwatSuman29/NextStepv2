@@ -230,11 +230,12 @@ export default function AdminCollegesPage() {
 
   const handleDelete = async (id: string) => {
     setDeleteError(null)
-    setColleges(prev => prev.map(c => c.id === id ? { ...c, is_deleted: true } : c))
+    const prev = colleges
+    setColleges(colleges.filter(c => c.id !== id))
     setConfirmDeleteId(null)
     const res = await fetch(`/api/admin/colleges/${id}`, { method: 'DELETE' })
     if (!res.ok) {
-      setColleges(prev => prev.map(c => c.id === id ? { ...c, is_deleted: false } : c))
+      setColleges(prev)
       const data = await res.json()
       setDeleteError(data.error || 'Failed to delete college')
     }
@@ -523,7 +524,7 @@ export default function AdminCollegesPage() {
               key={c.id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`rounded-2xl border border-border/60 bg-card p-5 shadow-soft transition-all hover:shadow-lifted ${c.is_deleted ? 'opacity-40' : ''}`}
+              className="rounded-2xl border border-border/60 bg-card p-5 shadow-soft transition-all hover:shadow-lifted"
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
@@ -563,35 +564,31 @@ export default function AdminCollegesPage() {
                 </p>
               )}
 
-              {!c.is_deleted ? (
-                <div className="mt-3 flex items-center gap-2 border-t border-border/40 pt-3">
-                  {confirmDeleteId === c.id ? (
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-medium text-red-700">Delete?</span>
-                      <button onClick={() => handleDelete(c.id)} className="rounded-md bg-destructive px-2 py-0.5 text-[10px] font-semibold text-white hover:bg-destructive/90 transition-colors">Yes</button>
-                      <button onClick={() => setConfirmDeleteId(null)} className="rounded-md border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground hover:bg-background transition-colors">No</button>
-                    </div>
-                  ) : (
-                    <>
-                      <button onClick={() => handleEdit(c)}
-                        className="rounded-lg px-2.5 py-1 text-xs font-medium text-secondary hover:bg-secondary/5 transition-colors flex items-center gap-1">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                        Edit
-                      </button>
-                      <button onClick={() => handleToggleStatus(c.id, c.status)}
-                        className="rounded-lg px-2.5 py-1 text-xs font-medium text-primary hover:bg-primary/5 transition-colors">
-                        {c.status === 'active' ? 'Deactivate' : 'Activate'}
-                      </button>
-                      <button onClick={() => setConfirmDeleteId(c.id)}
-                        className="rounded-lg px-2.5 py-1 text-xs font-medium text-destructive hover:bg-red-50 transition-colors">
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </div>
-              ) : (
-                <p className="mt-3 text-[10px] text-muted-foreground border-t border-border/40 pt-3">Deleted</p>
-              )}
+              <div className="mt-3 flex items-center gap-2 border-t border-border/40 pt-3">
+                {confirmDeleteId === c.id ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-medium text-red-700">Permanently delete?</span>
+                    <button onClick={() => handleDelete(c.id)} className="rounded-md bg-destructive px-2 py-0.5 text-[10px] font-semibold text-white hover:bg-destructive/90 transition-colors">Yes</button>
+                    <button onClick={() => setConfirmDeleteId(null)} className="rounded-md border border-border px-2 py-0.5 text-[10px] font-medium text-muted-foreground hover:bg-background transition-colors">No</button>
+                  </div>
+                ) : (
+                  <>
+                    <button onClick={() => handleEdit(c)}
+                      className="rounded-lg px-2.5 py-1 text-xs font-medium text-secondary hover:bg-secondary/5 transition-colors flex items-center gap-1">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                      Edit
+                    </button>
+                    <button onClick={() => handleToggleStatus(c.id, c.status)}
+                      className="rounded-lg px-2.5 py-1 text-xs font-medium text-primary hover:bg-primary/5 transition-colors">
+                      {c.status === 'active' ? 'Deactivate' : 'Activate'}
+                    </button>
+                    <button onClick={() => setConfirmDeleteId(c.id)}
+                      className="rounded-lg px-2.5 py-1 text-xs font-medium text-destructive hover:bg-red-50 transition-colors">
+                      Delete
+                    </button>
+                  </>
+                )}
+              </div>
             </motion.div>
           ))}
           {colleges.length === 0 && (

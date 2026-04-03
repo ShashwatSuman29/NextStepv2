@@ -29,7 +29,6 @@ export async function GET(request: Request) {
     .select('id, name, city, state, description, fee_min, fee_max, daily_visit_capacity, placement_rate, avg_package, highest_package, hostel_available, scholarship, accreditation, college_type, ranking, campus_size, established_year, website, facilities, image_paths, college_courses(id, course_name, branch, stream, duration_years, annual_fee, exams_accepted)')
     .in('id', ids)
     .eq('status', 'active')
-    .eq('is_deleted', false)
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 })
