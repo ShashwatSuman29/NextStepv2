@@ -48,9 +48,31 @@ export async function GET(request: Request) {
     .order('created_at', { ascending: false })
     .range(from, from + pageSize - 1)
 
-  if (dbError) {
-    console.error('DB error:', dbError.message)
+  if (usersErr) {
+    console.error('DB error:', usersErr.message)
     return NextResponse.json({ error: 'Failed to fetch students' }, { status: 500 })
   }
-  return NextResponse.json({ data, count, page, pageSize })
+
+  // Fetch profiles for returned users (second query to avoid PostgREST join issues)
+  const userIds = (users ?? []).map((u: { id: string }) => u.id)
+  let profilesMap: Record<string, any> = {}
+
+  if (userIds.length > 0) {
+    const { data: profiles } = await supabase
+      .from('student_profiles')
+      .select('*')
+      .in('user_id', userIds)
+
+    for (const p of profiles ?? []) {
+      profilesMap[p.user_id] = p
+    }
+  }
+
+  // Attach profiles to users
+  const enrichedUsers = (users ?? []).map((u: { id: string }) => ({
+    ...u,
+    student_profiles: profilesMap[u.id] ? [profilesMap[u.id]] : [],
+  }))
+
+  return NextResponse.json({ data: enrichedUsers, count, page, pageSize })
 }
