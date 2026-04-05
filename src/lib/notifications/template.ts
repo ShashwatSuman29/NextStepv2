@@ -12,18 +12,18 @@ export function getNotificationEmailHtml(message: string): string {
   return `
 <!DOCTYPE html>
 <html>
-  <body style="margin:0; padding:0; background-color:#0b1f1a; font-family:Arial, sans-serif;">
-    
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0b1f1a; margin:0; padding:40px 0;">
+  <body style="margin:0; padding:0; background-color:#2e4a42; font-family:Arial, sans-serif;">
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#2e4a42; margin:0; padding:40px 0;">
       <tr>
         <td align="center">
 
           <!-- Email Card -->
-          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; background-color:#0f2e25; border-radius:12px; overflow:hidden;">
-            
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; background-color:#3d5c53; border-radius:12px; overflow:hidden;">
+
             <!-- Header -->
             <tr>
-              <td align="center" style="padding:30px 20px; background-color:#0f2e25;">
+              <td align="center" style="padding:30px 20px; background-color:#3d5c53;">
                 
                 <table cellpadding="0" cellspacing="0" border="0">
                   <tr>
@@ -79,11 +79,11 @@ export function getNotificationEmailHtml(message: string): string {
             <!-- Notification Message Box -->
             <tr>
               <td align="center" style="padding:25px 30px 20px 30px;">
-                <table cellpadding="0" cellspacing="0" border="0" style="background-color:#12382d; border:1px solid #1f4d3c; border-radius:12px; width: 100%;">
+                <table cellpadding="0" cellspacing="0" border="0" style="background-color:#2e4a42; border:1px solid #50786d; border-radius:12px; width: 100%;">
                   <tr>
                     <td align="center" style="padding:24px 32px;">
                       <p style="
-                        color:#22c55e;
+                        color:#b3cdc5;
                         font-size:18px;
                         font-weight:500;
                         line-height:1.5;
@@ -104,7 +104,7 @@ export function getNotificationEmailHtml(message: string): string {
                 <p style="color:#8ca79d; font-size:14px; line-height:1.6; margin:0; font-family:Arial, sans-serif; padding-bottom: 20px;">
                   Please log in to your dashboard to view more details.
                 </p>
-                <a href="https://yournextstep.me/dashboard" style="display:inline-block; padding:12px 24px; background-color:#22c55e; color:#0b1f1a; text-decoration:none; font-size:15px; font-weight:bold; border-radius:6px; font-family:Arial, sans-serif;">
+                <a href="https://yournextstep.me/dashboard" style="display:inline-block; padding:12px 24px; background-color:#50786d; color:#ffffff; text-decoration:none; font-size:15px; font-weight:bold; border-radius:6px; font-family:Arial, sans-serif;">
                   Go to Dashboard
                 </a>
               </td>
@@ -113,7 +113,7 @@ export function getNotificationEmailHtml(message: string): string {
             <!-- Divider -->
             <tr>
               <td style="padding:30px 30px 0 30px;">
-                <hr style="border:none; border-top:1px solid #1f4d3c; margin:0;" />
+                <hr style="border:none; border-top:1px solid #50786d; margin:0;" />
               </td>
             </tr>
 

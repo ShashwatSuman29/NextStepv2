@@ -4,7 +4,7 @@ import { createServiceClient } from '@/lib/supabase/server'
 import { validateUuidParam } from '@/lib/utils'
 
 /**
- * GET /api/admin/students/[id] — Single student profile.
+ * GET /api/admin/students/[id] — Single student with profile.
  */
 export async function GET(
   _request: Request,
@@ -18,13 +18,26 @@ export async function GET(
   if (invalid) return invalid
   const supabase = createServiceClient()
 
-  const { data, error: dbError } = await supabase
+  const { data: user, error: userErr } = await supabase
     .from('users')
-    .select('*, student_profiles(*)')
+    .select('*')
     .eq('id', id)
     .eq('role', 'student')
     .single()
 
-  if (dbError || !data) return NextResponse.json({ error: 'Student not found' }, { status: 404 })
+  if (userErr || !user) return NextResponse.json({ error: 'Student not found' }, { status: 404 })
+
+  // Fetch profile separately for reliability
+  const { data: profile } = await supabase
+    .from('student_profiles')
+    .select('*')
+    .eq('user_id', id)
+    .single()
+
+  const data = {
+    ...user,
+    student_profiles: profile ? [profile] : [],
+  }
+
   return NextResponse.json({ data })
 }

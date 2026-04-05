@@ -23,26 +23,34 @@ export default function NotificationsPage() {
     setLoading(false)
   }
 
+  const notifyBadge = () => {
+    window.dispatchEvent(new Event('notifications-updated'))
+  }
+
   const markAsRead = async (id: string) => {
     await fetch(`/api/notifications/${id}/read`, { method: 'PATCH' })
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n))
+    notifyBadge()
   }
 
   const markAllRead = async () => {
     await fetch('/api/notifications/read-all', { method: 'PATCH' })
     setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
+    notifyBadge()
   }
 
   const deleteNotification = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation()
     await fetch(`/api/notifications/${id}`, { method: 'DELETE' })
     setNotifications(prev => prev.filter(n => n.id !== id))
+    notifyBadge()
   }
 
   const deleteAll = async () => {
     if (!confirm('Are you sure you want to delete all notifications?')) return
     await fetch('/api/notifications', { method: 'DELETE' })
     setNotifications([])
+    notifyBadge()
   }
 
   useEffect(() => { fetchNotifications() }, [])

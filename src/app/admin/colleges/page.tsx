@@ -30,6 +30,27 @@ interface College {
   image_paths: string[]
 }
 
+interface CourseEntry {
+  id?: string
+  course_name: string
+  branch: string
+  stream: 'UG' | 'PG'
+  duration_years: string | number
+  annual_fee: string | number
+  eligibility: string
+  exams_accepted: string[]
+}
+
+const COMMON_EXAMS = [
+  'JEE Main', 'JEE Advanced', 'MHT-CET', 'NEET', 'CAT', 'MAT',
+  'GATE', 'CLAT', 'CUET', 'BITSAT', 'VITEEE', 'COMEDK',
+]
+
+const EMPTY_COURSE: CourseEntry = {
+  course_name: '', branch: '', stream: 'UG', duration_years: '',
+  annual_fee: '', eligibility: '', exams_accepted: [],
+}
+
 const FACILITIES_OPTIONS = [
   'Library', 'Gymnasium', 'Swimming Pool', 'Cafeteria', 'Auditorium',
   'Computer Lab', 'Sports Ground', 'Wi-Fi Campus', 'Medical Center',
@@ -92,6 +113,10 @@ export default function AdminCollegesPage() {
     })
     setImageUrlInput('')
     setEditingId(null)
+    setCourses([])
+    setExistingCourses([])
+    setShowAddCourse(false)
+    setNewCourse({ ...EMPTY_COURSE })
   }
 
   const handleEdit = (college: College) => {
@@ -120,6 +145,8 @@ export default function AdminCollegesPage() {
       image_paths: college.image_paths ?? [],
     })
     setEditingId(college.id)
+    setCourses([])
+    fetchCoursesForCollege(college.id)
     setShowForm(true)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -145,6 +172,29 @@ export default function AdminCollegesPage() {
       body: JSON.stringify(payload),
     })
     if (res.ok) {
+      const savedCollege = await res.json()
+      const collegeId = editingId ?? savedCollege?.data?.id
+
+      // Save any new courses added inline
+      if (collegeId && courses.length > 0) {
+        for (const c of courses) {
+          await fetch('/api/admin/streams', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              college_id: collegeId,
+              course_name: c.course_name,
+              branch: c.branch || null,
+              stream: c.stream,
+              duration_years: c.duration_years === '' ? null : Number(c.duration_years),
+              annual_fee: c.annual_fee === '' ? null : Number(c.annual_fee),
+              eligibility: c.eligibility || null,
+              exams_accepted: c.exams_accepted,
+            }),
+          })
+        }
+      }
+
       setShowForm(false)
       resetForm()
       fetchColleges()
@@ -313,7 +363,7 @@ export default function AdminCollegesPage() {
               {/* Fees & Placement */}
               <div className="rounded-xl border border-border/40 bg-muted/20 p-5 space-y-4">
                 <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <span className="text-sm font-bold text-primary">₹</span>
                   Fees & Placement
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -373,6 +423,129 @@ export default function AdminCollegesPage() {
                     Featured College
                   </label>
                 </div>
+              </div>
+
+              {/* Streams Offered */}
+              <div className="rounded-xl border border-border/40 bg-muted/20 p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-bold text-foreground flex items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>
+                    Streams & Courses Offered
+                  </h4>
+                  <button type="button" onClick={() => setShowAddCourse(!showAddCourse)}
+                    className="flex items-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/20 transition-colors">
+                    {showAddCourse ? (
+                      <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M12 4L4 12M4 4l8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>Cancel</>
+                    ) : (
+                      <><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 3.333v9.334M3.333 8h9.334" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/></svg>Add Course</>
+                    )}
+                  </button>
+                </div>
+
+                {/* Existing courses (when editing) */}
+                {existingCourses.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">Existing Courses</p>
+                    {existingCourses.map(c => (
+                      <div key={c.id} className="flex items-center justify-between rounded-lg border border-border/40 bg-card px-4 py-2.5">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-bold ${
+                            c.stream === 'UG' ? 'border-blue-200 bg-blue-50 text-blue-700' : 'border-purple-200 bg-purple-50 text-purple-700'
+                          }`}>{c.stream}</span>
+                          <span className="text-sm font-semibold text-foreground truncate">{c.course_name}</span>
+                          {c.branch && <span className="text-xs text-muted-foreground">— {c.branch}</span>}
+                          {c.annual_fee && <span className="text-[10px] text-muted-foreground ml-2">₹{Number(c.annual_fee).toLocaleString('en-IN')}/yr</span>}
+                        </div>
+                        <button type="button" onClick={() => c.id && deleteExistingCourse(c.id)}
+                          className="shrink-0 rounded-md px-2 py-0.5 text-[10px] font-medium text-destructive hover:bg-red-50 transition-colors">
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Newly added courses (not yet saved) */}
+                {courses.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">New Courses (will be saved with college)</p>
+                    {courses.map((c, i) => (
+                      <div key={i} className="flex items-center justify-between rounded-lg border border-primary/20 bg-primary/[0.03] px-4 py-2.5">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-bold ${
+                            c.stream === 'UG' ? 'border-blue-200 bg-blue-50 text-blue-700' : 'border-purple-200 bg-purple-50 text-purple-700'
+                          }`}>{c.stream}</span>
+                          <span className="text-sm font-semibold text-foreground truncate">{c.course_name}</span>
+                          {c.branch && <span className="text-xs text-muted-foreground">— {c.branch}</span>}
+                          {c.annual_fee && <span className="text-[10px] text-muted-foreground ml-2">₹{Number(c.annual_fee).toLocaleString('en-IN')}/yr</span>}
+                        </div>
+                        <button type="button" onClick={() => removeNewCourse(i)}
+                          className="shrink-0 rounded-md px-2 py-0.5 text-[10px] font-medium text-destructive hover:bg-red-50 transition-colors">
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Add course inline form */}
+                {showAddCourse && (
+                  <div className="rounded-lg border border-primary/20 bg-primary/[0.02] p-4 space-y-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className={labelClass}>Course Name *</label>
+                        <input value={newCourse.course_name} onChange={(e) => setNewCourse({...newCourse, course_name: e.target.value})} placeholder="e.g. B.Tech, MBA" className={inputClass} />
+                      </div>
+                      <div>
+                        <label className={labelClass}>Branch</label>
+                        <input value={newCourse.branch} onChange={(e) => setNewCourse({...newCourse, branch: e.target.value})} placeholder="e.g. Computer Science" className={inputClass} />
+                      </div>
+                      <div>
+                        <label className={labelClass}>Stream *</label>
+                        <select value={newCourse.stream} onChange={(e) => setNewCourse({...newCourse, stream: e.target.value as 'UG' | 'PG'})} className={inputClass}>
+                          <option value="UG">UG (Undergraduate)</option>
+                          <option value="PG">PG (Postgraduate)</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className={labelClass}>Duration (Years)</label>
+                        <input type="number" min={1} max={6} value={newCourse.duration_years} onChange={(e) => setNewCourse({...newCourse, duration_years: e.target.value === '' ? '' : Number(e.target.value)})} placeholder="e.g. 4" className={inputClass} />
+                      </div>
+                      <div>
+                        <label className={labelClass}>Annual Fee (INR)</label>
+                        <input type="number" min={0} value={newCourse.annual_fee} onChange={(e) => setNewCourse({...newCourse, annual_fee: e.target.value === '' ? '' : Number(e.target.value)})} placeholder="e.g. 150000" className={inputClass} />
+                      </div>
+                    </div>
+                    <div>
+                      <label className={labelClass}>Eligibility</label>
+                      <input value={newCourse.eligibility} onChange={(e) => setNewCourse({...newCourse, eligibility: e.target.value})} placeholder="e.g. 10+2 with PCM, min 60%" className={inputClass} />
+                    </div>
+                    <div>
+                      <label className={labelClass}>Exams Accepted</label>
+                      <div className="flex flex-wrap gap-1.5 mt-1">
+                        {COMMON_EXAMS.map(exam => (
+                          <button key={exam} type="button" onClick={() => toggleNewCourseExam(exam)}
+                            className={`rounded-md border px-2.5 py-1 text-[10px] font-medium transition-all ${
+                              newCourse.exams_accepted.includes(exam)
+                                ? 'border-primary bg-primary/10 text-primary'
+                                : 'border-border bg-card text-muted-foreground hover:border-primary/30'
+                            }`}
+                          >{exam}</button>
+                        ))}
+                      </div>
+                    </div>
+                    <button type="button" onClick={addNewCourse} disabled={!newCourse.course_name}
+                      className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 disabled:opacity-50">
+                      Add to List
+                    </button>
+                  </div>
+                )}
+
+                {existingCourses.length === 0 && courses.length === 0 && !showAddCourse && (
+                  <p className="text-xs text-muted-foreground/60">No courses added yet. Click &quot;Add Course&quot; to add streams offered by this college.</p>
+                )}
               </div>
 
               {/* Campus Photos */}
@@ -480,7 +653,7 @@ export default function AdminCollegesPage() {
 
               {(c.fee_min || c.fee_max) && (
                 <p className="mt-2 text-xs text-muted-foreground">
-                  Fee: <span className="font-semibold text-foreground">₹{c.fee_min?.toLocaleString('en-IN') ?? '—'} – ₹{c.fee_max?.toLocaleString('en-IN') ?? '—'}</span>/yr
+                  Fee: <span className="font-semibold text-foreground"><span className="text-primary">₹</span>{c.fee_min?.toLocaleString('en-IN') ?? '—'} – <span className="text-primary">₹</span>{c.fee_max?.toLocaleString('en-IN') ?? '—'}</span>/yr
                 </p>
               )}
 

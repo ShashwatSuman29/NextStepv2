@@ -177,38 +177,53 @@ function ComparePageContent() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
+      <div className="bg-primary-dark">
+        <Navbar />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-primary-dark py-12 px-5">
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `radial-gradient(circle at 40% 30%, rgba(245,158,11,0.3) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(99,102,241,0.3) 0%, transparent 50%)`,
-          }}
-        />
-        <div className="relative mx-auto max-w-6xl text-center">
+      <section className="relative overflow-hidden py-14 px-5">
+        <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+        <div className="absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-[#95d5b2]/20 blur-[100px]" />
+        <div className="absolute -left-16 top-0 h-48 w-48 rounded-full bg-[#74c69d]/15 blur-[80px]" />
+        <div className="relative mx-auto max-w-6xl">
           <AnimatedSection>
-            <h1 className="text-3xl font-bold text-white sm:text-4xl">
-              Compare Colleges
-            </h1>
-            <p className="mt-2 text-white/60">
-              Select up to 3 colleges to compare side-by-side.
-            </p>
+            <div className="flex flex-col items-center text-center">
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white/80">
+                  <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  <path d="M9 14l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <h1 className="text-3xl font-bold text-white sm:text-4xl tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
+                Compare Colleges
+              </h1>
+              <p className="mt-2 max-w-md text-sm text-white/50">
+                Select up to 3 colleges for a detailed side-by-side comparison of fees, placements, courses, and more.
+              </p>
+            </div>
           </AnimatedSection>
         </div>
       </section>
+      </div>
 
       <div className="mx-auto w-full max-w-6xl px-5 py-8">
         {/* College selector */}
-        <div className="rounded-2xl border border-border/60 bg-card p-5 shadow-soft">
-          <div className="mb-3 flex items-center justify-between">
-            <h2
-              className="text-sm font-bold uppercase tracking-wider text-muted-foreground"
-              style={{ fontFamily: 'var(--font-sans)' }}
-            >
-              Select Colleges ({selectedIds.length}/3)
-            </h2>
+        <div className="rounded-2xl border border-border/60 bg-card p-6 shadow-soft">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/[0.07]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="text-primary">
+                  <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5"/>
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-sm font-bold text-foreground">
+                  Select Colleges
+                </h2>
+                <p className="text-[11px] text-muted-foreground">{selectedIds.length} of 3 selected</p>
+              </div>
+            </div>
             {selectedIds.length > 0 && (
               <button
                 onClick={() => setSelectedIds([])}
@@ -430,7 +445,6 @@ function ComparePageContent() {
             </div>
             <h3
               className="mt-5 text-xl font-bold text-foreground"
-              style={{ fontFamily: 'var(--font-sans)' }}
             >
               Start Comparing Colleges
             </h3>
@@ -540,25 +554,33 @@ function ComparePageContent() {
                     Criteria
                   </span>
                 </div>
-                {colleges.map(c => (
-                  <div
-                    key={c.id}
-                    className="rounded-t-2xl border border-border/60 bg-card p-5 text-center"
-                  >
-                    <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-sm font-bold text-primary">
-                      {c.name.charAt(0)}
-                    </div>
-                    <h3
-                      className="text-base font-bold text-foreground"
-                      style={{ fontFamily: 'var(--font-sans)' }}
+                {colleges.map((c, idx) => {
+                  const colors = ['bg-[#4285F4]/10 text-[#4285F4]', 'bg-[#FF9800]/10 text-[#FF9800]', 'bg-[#2E7D32]/10 text-[#2E7D32]']
+                  const borderColors = ['border-[#4285F4]/20', 'border-[#FF9800]/20', 'border-[#2E7D32]/20']
+                  return (
+                    <div
+                      key={c.id}
+                      className={`rounded-t-2xl border-2 ${borderColors[idx]} bg-card p-5 text-center`}
                     >
-                      {c.name}
-                    </h3>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {c.city}, {c.state}
-                    </p>
-                  </div>
-                ))}
+                      <div className={`mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl ${colors[idx]} text-sm font-bold`}>
+                        {c.name.charAt(0)}
+                      </div>
+                      <h3
+                        className="text-base font-bold text-foreground"
+                      >
+                        {c.name}
+                      </h3>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {c.city}, {c.state}
+                      </p>
+                      {c.accreditation && (
+                        <span className="mt-2 inline-block rounded-full bg-muted px-2.5 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                          {c.accreditation}
+                        </span>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
 
               {/* Comparison rows */}

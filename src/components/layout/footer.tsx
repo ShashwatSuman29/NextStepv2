@@ -45,7 +45,6 @@ export function Footer() {
               {[
                 { href: '/colleges', label: 'Browse Colleges' },
                 { href: '/colleges/compare', label: 'Compare Colleges' },
-                { href: '/auth/login', label: 'Get Started' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -90,9 +89,11 @@ export function Footer() {
               Contact
             </h4>
             <ul className="mt-5 space-y-3.5">
-              <li className="flex items-center gap-2.5 text-sm text-muted-foreground">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 text-muted-foreground/60"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><path d="M22 6l-10 7L2 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                hello.yournextstep@gmail.com
+              <li>
+                <a href="mailto:hello.yournextstep@gmail.com" className="flex items-center gap-2.5 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 text-muted-foreground/60"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><path d="M22 6l-10 7L2 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  hello.yournextstep@gmail.com
+                </a>
               </li>
               <li className="flex items-center gap-2.5 text-sm text-muted-foreground">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="shrink-0 text-muted-foreground/60"><path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/><circle cx="12" cy="11" r="3" stroke="currentColor" strokeWidth="1.5"/></svg>

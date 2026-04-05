@@ -1,5 +1,6 @@
 import { Navbar } from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
+import { FAQSection } from '@/components/shared/faq-section'
 import { createServiceClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
@@ -135,23 +136,18 @@ export default async function PricingPage() {
         </div>
 
         {/* FAQ Section */}
-        <div className="mx-auto mt-24 max-w-3xl px-5 text-center">
-          <h2 className="text-2xl font-bold text-foreground sm:text-3xl" style={{ fontFamily: 'var(--font-serif)' }}>
-            Frequently Asked Questions
-          </h2>
-          <div className="mt-8 space-y-6 text-left">
-            {[
-              { q: 'When do I have to pay?', a: 'Your first few counselling sessions and your first college visit are completely free! You only ever hit a paywall once you have exhausted your generous free limits.' },
-              { q: 'Are there any hidden charges?', a: 'Absolutely not. The price you see here is exactly what you pay per added session or visit.' },
-              { q: 'Do these credits expire?', a: 'No, once you purchase extra counselling or visit credits in your dashboard, they remain in your wallet indefinitely until used.' },
-            ].map((faq, i) => (
-              <div key={i} className="rounded-2xl border border-border/60 bg-card p-6">
-                <h4 className="font-semibold text-foreground text-lg">{faq.q}</h4>
-                <p className="mt-2 text-muted-foreground text-base leading-relaxed">{faq.a}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <FAQSection
+          title="Pricing FAQ"
+          subtitle="Everything you need to know about our pricing and credits."
+          items={[
+            { question: 'When do I have to pay?', answer: 'Your first few counselling sessions and your first college visit are completely free! You only ever hit a paywall once you have exhausted your generous free limits.' },
+            { question: 'Are there any hidden charges?', answer: 'Absolutely not. The price you see here is exactly what you pay per added session or visit. No surprise fees, no subscriptions.' },
+            { question: 'Do these credits expire?', answer: 'No, once you purchase extra counselling or visit credits in your dashboard, they remain in your wallet indefinitely until used.' },
+            { question: 'Can I get a refund?', answer: 'Yes! If you are unsatisfied with a counselling session or a visit experience, you can request a refund within 7 days of the service. Check our refund policy for more details.' },
+            { question: 'How do I book a session or visit?', answer: 'Simply sign up, browse colleges, and click "Book Counselling" or "Request Visit" on any college page. Your free credits will be applied automatically.' },
+          ]}
+          className="mt-12"
+        />
       </main>
 
       <Footer />

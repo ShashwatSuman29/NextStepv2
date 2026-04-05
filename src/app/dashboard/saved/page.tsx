@@ -145,8 +145,7 @@ export default function SavedCollegesPage() {
                     <div className="mt-3 flex flex-wrap items-center gap-2">
                       {(c?.fee_min || c?.fee_max) && (
                         <span className="inline-flex items-center gap-1 rounded-lg bg-primary/5 px-2 py-1 text-xs font-semibold text-primary">
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-                          {c.fee_min?.toLocaleString('en-IN') ?? '—'} – {c.fee_max?.toLocaleString('en-IN') ?? '—'}
+                          ₹{c.fee_min?.toLocaleString('en-IN') ?? '—'} – ₹{c.fee_max?.toLocaleString('en-IN') ?? '—'}
                         </span>
                       )}
                       {c?.placement_rate != null && (
