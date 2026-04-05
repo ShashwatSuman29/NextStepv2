@@ -9,13 +9,13 @@ export const metadata = {
 export default function RefundPolicyPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Navbar />
+      <Navbar variant="transparent" />
 
       {/* Hero banner */}
       <div className="relative overflow-hidden bg-primary-dark">
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
         <div className="absolute -left-20 -bottom-20 h-64 w-64 rounded-full bg-[#74c69d]/20 blur-[100px]" />
-        <div className="relative mx-auto max-w-4xl px-6 py-16 text-center">
+        <div className="relative mx-auto max-w-4xl px-6 pb-16 pt-28 text-center">
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-white/80">
               <path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>

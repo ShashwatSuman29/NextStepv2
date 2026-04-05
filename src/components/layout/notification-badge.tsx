@@ -12,7 +12,10 @@ export function NotificationBadge({ initialCount = 0 }: NotificationBadgeProps) 
 
   const fetchCount = useCallback(async () => {
     try {
-      const res = await fetch('/api/notifications?unread=true')
+      // Cache-bust to ensure fresh data every time
+      const res = await fetch(`/api/notifications?unread=true&_t=${Date.now()}`, {
+        cache: 'no-store',
+      })
       const data = await res.json()
       const items = data.data ?? []
       setUnreadCount(items.filter((n: { is_read: boolean }) => !n.is_read).length)
@@ -36,8 +39,12 @@ export function NotificationBadge({ initialCount = 0 }: NotificationBadgeProps) 
     // Also poll every 30 seconds
     const interval = setInterval(fetchCount, 30000)
 
-    // Listen for custom event when notifications are marked as read
-    const handleRead = () => fetchCount()
+    // Listen for custom event when notifications are marked as read / deleted
+    const handleRead = () => {
+      // Immediately set to 0 optimistically, then verify with fetch
+      setUnreadCount(0)
+      fetchCount()
+    }
     window.addEventListener('notifications-updated', handleRead)
 
     return () => {

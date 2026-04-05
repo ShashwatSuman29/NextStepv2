@@ -9,13 +9,13 @@ export const metadata = {
 export default function TermsConditionsPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Navbar />
+      <Navbar variant="transparent" />
 
       {/* Hero banner */}
       <div className="relative overflow-hidden bg-primary-dark">
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
         <div className="absolute -right-20 -bottom-20 h-64 w-64 rounded-full bg-[#95d5b2]/20 blur-[100px]" />
-        <div className="relative mx-auto max-w-4xl px-6 py-16 text-center">
+        <div className="relative mx-auto max-w-4xl px-6 pb-16 pt-28 text-center">
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-white/80">
               <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

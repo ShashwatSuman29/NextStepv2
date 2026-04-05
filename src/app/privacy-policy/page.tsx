@@ -9,13 +9,13 @@ export const metadata = {
 export default function PrivacyPolicyPage() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Navbar />
+      <Navbar variant="transparent" />
 
       {/* Hero banner */}
       <div className="relative overflow-hidden bg-primary-dark">
         <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
         <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#95d5b2]/20 blur-[100px]" />
-        <div className="relative mx-auto max-w-4xl px-6 py-16 text-center">
+        <div className="relative mx-auto max-w-4xl px-6 pb-16 pt-28 text-center">
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-sm">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-white/80">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
