@@ -134,10 +134,12 @@ function CollegesContent() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
+      {/* Wrap navbar + hero so the spacer matches the hero background */}
+      <div className="bg-primary-dark">
+        <Navbar />
 
       {/* Hero Banner */}
-      <section className="relative overflow-hidden bg-primary-dark py-16 px-5">
+      <section className="relative overflow-hidden py-16 px-5">
         <div className="absolute inset-0 opacity-10"
           style={{
             backgroundImage: `radial-gradient(circle at 20% 50%, rgba(245,158,11,0.4) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(99,102,241,0.3) 0%, transparent 50%)`,
@@ -152,6 +154,7 @@ function CollegesContent() {
           </AnimatedSection>
         </div>
       </section>
+      </div>
 
       <div className="mx-auto w-full max-w-7xl px-5 py-8">
         {/* Search bar */}

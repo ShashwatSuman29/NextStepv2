@@ -13,7 +13,7 @@ export function FeatureCard({ icon, title, description }: FeatureCardProps) {
   return (
     <div className="group relative rounded-2xl border border-border/60 bg-card p-8 transition-all duration-500 hover:border-primary/15 hover:shadow-lifted">
       {/* Subtle gradient background on hover */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/[0.02] via-transparent to-gold/[0.02] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#588157]/[0.03] via-transparent to-[#ecf39e]/[0.04] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
       <div className="relative">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/[0.07] transition-all duration-500 group-hover:bg-primary/10 group-hover:shadow-sm">

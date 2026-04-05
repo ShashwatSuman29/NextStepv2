@@ -177,10 +177,11 @@ function ComparePageContent() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
+      <div className="bg-primary-dark">
+        <Navbar />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-primary-dark py-12 px-5">
+      <section className="relative overflow-hidden py-12 px-5">
         <div
           className="absolute inset-0 opacity-10"
           style={{
@@ -198,6 +199,7 @@ function ComparePageContent() {
           </AnimatedSection>
         </div>
       </section>
+      </div>
 
       <div className="mx-auto w-full max-w-6xl px-5 py-8">
         {/* College selector */}

@@ -283,14 +283,6 @@ export default function SettingsPage() {
               </div>
 
               <div className="rounded-xl border border-border/40 bg-muted/20 p-4 space-y-3">
-                <h3 className="text-sm font-bold text-foreground">NEET</h3>
-                <div>
-                  <label className="block text-sm font-medium text-foreground">Score</label>
-                  <input type="number" min="0" value={(profile.neet_score as number) ?? ''} onChange={(e) => setProfile({ ...profile, neet_score: e.target.value ? parseFloat(e.target.value) : null })} className={inputClass} placeholder="e.g. 620" />
-                </div>
-              </div>
-
-              <div className="rounded-xl border border-border/40 bg-muted/20 p-4 space-y-3">
                 <h3 className="text-sm font-bold text-foreground">Other Exam</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>

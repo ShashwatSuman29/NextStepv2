@@ -11,6 +11,7 @@ import { StatCounter } from '@/components/shared/stat-counter'
 import { TestimonialCarousel } from '@/components/shared/testimonial-carousel'
 import { CollegeCard } from '@/components/shared/college-card'
 import RotatingText from '@/components/shared/rotating-text'
+import { createClient } from '@/lib/supabase/client'
 
 interface FeaturedCollege {
   id: string
@@ -33,6 +34,16 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
   const { scrollYProgress } = useScroll()
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0])
   const heroY = useTransform(scrollYProgress, [0, 0.2], [0, 40])
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsLoggedIn(!!session?.user)
+    })
+  }, [])
+
+  const ctaHref = isLoggedIn ? '/dashboard' : '/auth/login'
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -42,9 +53,9 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
       <section className="relative flex min-h-[92vh] items-center overflow-hidden bg-primary-dark">
         {/* Mesh gradient background — Stripe style */}
         <div className="absolute inset-0">
-          <div className="absolute -left-40 -top-40 h-[600px] w-[600px] rounded-full bg-primary/20 blur-[160px] animate-breathe" />
-          <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-secondary/12 blur-[140px] animate-breathe" style={{ animationDelay: '2s' }} />
-          <div className="absolute bottom-0 left-1/3 h-[400px] w-[400px] rounded-full bg-gold/10 blur-[130px] animate-breathe" style={{ animationDelay: '4s' }} />
+          <div className="absolute -left-40 -top-40 h-[600px] w-[600px] rounded-full bg-[#588157]/25 blur-[160px] animate-breathe" />
+          <div className="absolute right-0 top-0 h-[500px] w-[500px] rounded-full bg-[#6a9b68]/18 blur-[140px] animate-breathe" style={{ animationDelay: '2s' }} />
+          <div className="absolute bottom-0 left-1/3 h-[400px] w-[400px] rounded-full bg-[#90a955]/12 blur-[130px] animate-breathe" style={{ animationDelay: '4s' }} />
         </div>
 
         {/* Stripe-style subtle grid */}
@@ -68,7 +79,7 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             >
               <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-1.5 text-[13px] font-medium text-white/60 backdrop-blur-sm">
-                <span className="h-1.5 w-1.5 rounded-full bg-green-400 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#90a955] animate-pulse" />
                 Trusted by 10,000+ students across India
               </span>
             </motion.div>
@@ -84,7 +95,7 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
               Your college journey,{' '}
               <RotatingText
                 texts={['simplified', 'sorted', 'streamlined', 'secured']}
-                mainClassName="px-3 sm:px-4 md:px-5 bg-gradient-to-r from-gold to-secondary text-white overflow-hidden py-1 sm:py-1.5 md:py-2 justify-center rounded-xl inline-flex"
+                mainClassName="px-3 sm:px-4 md:px-5 bg-white/[0.12] text-white border border-white/[0.15] overflow-hidden py-1 sm:py-1.5 md:py-2 justify-center rounded-xl inline-flex backdrop-blur-sm"
                 staggerFrom="last"
                 initial={{ y: '100%' }}
                 animate={{ y: 0 }}
@@ -115,10 +126,10 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
               className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center"
             >
               <Link
-                href="/auth/login"
+                href={ctaHref}
                 className="group relative inline-flex items-center justify-center gap-2.5 rounded-full bg-white px-8 py-3.5 text-[15px] font-semibold text-primary-dark shadow-lg shadow-black/10 transition-all duration-300 hover:shadow-xl hover:shadow-black/15 hover:-translate-y-0.5 active:translate-y-0"
               >
-                Get started
+                {isLoggedIn ? 'Go to Dashboard' : 'Get started'}
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:translate-x-0.5">
                   <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -191,8 +202,8 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
                 className="w-56 rounded-2xl border border-white/[0.08] bg-white/[0.04] p-5 backdrop-blur-xl"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-500/15">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-green-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#588157]/20">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-white/80">
                       <path d="M22 11.08V12a10 10 0 11-5.93-9.14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                       <path d="M22 4L12 14.01l-3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
@@ -211,8 +222,8 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
                 className="w-56 rounded-2xl border border-white/[0.08] bg-white/[0.04] p-5 backdrop-blur-xl"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold/15">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-gold">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#588157]/15">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-white/70">
                       <path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                       <circle cx="12" cy="11" r="3" stroke="currentColor" strokeWidth="1.5"/>
                     </svg>
@@ -290,8 +301,8 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
       {/* ============ STATS — dark section with depth ============ */}
       <section className="relative overflow-hidden bg-primary-dark py-28 px-6">
         {/* Gradient orbs */}
-        <div className="absolute -left-32 top-1/2 -translate-y-1/2 h-80 w-80 rounded-full bg-primary/15 blur-[120px]" />
-        <div className="absolute -right-32 top-1/2 -translate-y-1/2 h-80 w-80 rounded-full bg-gold/10 blur-[120px]" />
+        <div className="absolute -left-32 top-1/2 -translate-y-1/2 h-80 w-80 rounded-full bg-[#588157]/25 blur-[120px]" />
+        <div className="absolute -right-32 top-1/2 -translate-y-1/2 h-80 w-80 rounded-full bg-[#6a9b68]/18 blur-[120px]" />
 
         {/* Dot grid */}
         <div className="absolute inset-0 opacity-[0.03]"
@@ -330,21 +341,21 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
                 title: 'Create Your Profile',
                 desc: 'Sign up and tell us about your academics, preferences, and dream course. It takes less than 2 minutes.',
                 icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
-                gradient: 'from-primary/5 to-primary/[0.02]',
+                gradient: 'from-[#588157]/8 to-[#588157]/[0.02]',
               },
               {
                 step: '02',
                 title: 'Explore & Compare',
                 desc: 'Browse our curated list of colleges, filter by what matters to you, and save your favourites for easy comparison.',
                 icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z',
-                gradient: 'from-gold/5 to-gold/[0.02]',
+                gradient: 'from-[#90a955]/8 to-[#90a955]/[0.02]',
               },
               {
                 step: '03',
                 title: 'Book & Visit',
                 desc: 'Schedule a free counselling call with an expert or request a campus visit. We handle the coordination.',
                 icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
-                gradient: 'from-secondary/5 to-secondary/[0.02]',
+                gradient: 'from-[#ecf39e]/10 to-[#ecf39e]/[0.02]',
               },
             ].map((item, i) => (
               <AnimatedSection key={item.step} delay={i * 0.12}>
@@ -454,9 +465,9 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
 
         {/* Gradient mesh */}
         <div className="absolute inset-0">
-          <div className="absolute -left-20 top-0 h-80 w-80 rounded-full bg-primary/20 blur-[120px]" />
-          <div className="absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-gold/15 blur-[120px]" />
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-60 w-60 rounded-full bg-secondary/10 blur-[100px]" />
+          <div className="absolute -left-20 top-0 h-80 w-80 rounded-full bg-[#588157]/25 blur-[120px]" />
+          <div className="absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-[#6a9b68]/15 blur-[120px]" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-60 w-60 rounded-full bg-[#90a955]/10 blur-[100px]" />
         </div>
 
         {/* Dot pattern */}
@@ -476,10 +487,10 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
           </p>
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
-              href="/auth/login"
+              href={ctaHref}
               className="group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[15px] font-semibold text-primary-dark shadow-lg shadow-black/10 transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
             >
-              Start your journey
+              {isLoggedIn ? 'Go to Dashboard' : 'Start your journey'}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform group-hover:translate-x-0.5">
                 <path d="M3.333 8h9.334M8.667 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

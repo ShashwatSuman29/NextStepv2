@@ -60,14 +60,14 @@ export function CollegeCard({
                 </span>
               )}
               {accreditation && (
-                <span className="rounded-lg bg-gold/90 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white shadow-sm">
+                <span className="rounded-lg bg-[#90a955]/90 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white shadow-sm">
                   {accreditation}
                 </span>
               )}
             </div>
 
             {placementRate != null && (
-              <span className="absolute top-3 right-3 rounded-lg bg-green-500/90 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white shadow-sm flex items-center gap-1">
+              <span className="absolute top-3 right-3 rounded-lg bg-[#588157]/90 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white shadow-sm flex items-center gap-1">
                 <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M2 14l4-4 3 3 5-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 {placementRate}%
               </span>
@@ -121,16 +121,16 @@ export function CollegeCard({
               <span className="rounded-md bg-muted/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">Est. {establishedYear}</span>
             )}
             {hostelAvailable && (
-              <span className="rounded-md bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-600 border border-blue-100">Hostel</span>
+              <span className="rounded-md bg-[#90a955]/10 px-2 py-0.5 text-[10px] font-semibold text-[#588157] border border-[#90a955]/20">Hostel</span>
             )}
             {scholarship && (
-              <span className="rounded-md bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-600 border border-green-100">Scholarship</span>
+              <span className="rounded-md bg-[#ecf39e]/30 px-2 py-0.5 text-[10px] font-semibold text-[#31572c] border border-[#ecf39e]/50">Scholarship</span>
             )}
             {!hasImage && collegeType && (
               <span className="rounded-md bg-primary/5 px-2 py-0.5 text-[10px] font-semibold text-primary capitalize">{collegeType}</span>
             )}
             {!hasImage && accreditation && (
-              <span className="rounded-md bg-gold-light px-2 py-0.5 text-[10px] font-semibold text-amber-700">{accreditation}</span>
+              <span className="rounded-md bg-gold-light px-2 py-0.5 text-[10px] font-semibold text-[#31572c]">{accreditation}</span>
             )}
           </div>
 
@@ -146,9 +146,9 @@ export function CollegeCard({
               </div>
             )}
             {!hasImage && placementRate != null && (
-              <div className="flex items-center gap-1 rounded-xl bg-green-50 px-3 py-2 border border-green-100">
-                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" className="text-green-600"><path d="M2 14l4-4 3 3 5-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                <span className="text-xs font-bold text-green-700">{placementRate}% placed</span>
+              <div className="flex items-center gap-1 rounded-xl bg-[#ecf39e]/20 px-3 py-2 border border-[#90a955]/20">
+                <svg width="10" height="10" viewBox="0 0 16 16" fill="none" className="text-[#588157]"><path d="M2 14l4-4 3 3 5-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <span className="text-xs font-bold text-[#31572c]">{placementRate}% placed</span>
               </div>
             )}
           </div>
@@ -165,7 +165,7 @@ export function CollegeCard({
         </div>
 
         {/* Bottom gradient line on hover */}
-        <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-primary via-secondary to-primary opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-[#588157] via-[#90a955] to-[#588157] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       </Link>
 
       {/* Save toggle */}

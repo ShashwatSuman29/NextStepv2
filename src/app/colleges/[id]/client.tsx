@@ -31,7 +31,8 @@ export function CollegeDetailClient({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar />
+      <div className="bg-primary-dark">
+        <Navbar />
 
       {/* Hero banner with photo */}
       <section className="relative overflow-hidden bg-primary-dark">
@@ -81,6 +82,7 @@ export function CollegeDetailClient({
           </AnimatedSection>
         </div>
       </section>
+      </div>
 
       <div className="mx-auto w-full max-w-5xl px-5 py-8">
         {/* Photo Gallery */}

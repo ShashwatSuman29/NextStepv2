@@ -21,7 +21,6 @@ export const profileSchema = z.object({
   board_10th: z.string().max(100).nullable().optional(),
   board_12th: z.string().max(100).nullable().optional(),
   mht_cet_score: z.number().min(0).nullable().optional(),
-  neet_score: z.number().min(0).nullable().optional(),
   other_exam_name: z.string().max(100).nullable().optional(),
   other_exam_score: z.number().min(0).nullable().optional(),
   budget_min: z.number().int().min(0).nullable().optional(),
@@ -35,8 +34,7 @@ export type ProfileUpdateInput = z.infer<typeof profileUpdateSchema>
 
 /**
  * Determines is_complete based on requirements:
- * - full_name, phone, marks_10th, marks_12th, jee_rank, desired_course, stream, city, state — all required
- * - desired_branch is OPTIONAL
+ * All key fields must be filled for a 100% complete profile.
  */
 export function computeIsComplete(data: ProfileInput): boolean {
   return (
@@ -46,8 +44,11 @@ export function computeIsComplete(data: ProfileInput): boolean {
     data.marks_12th != null &&
     data.jee_rank != null &&
     !!data.desired_course &&
+    !!data.desired_branch &&
     !!data.stream &&
     !!data.city &&
-    !!data.state
+    !!data.state &&
+    data.budget_min != null &&
+    data.budget_max != null
   )
 }

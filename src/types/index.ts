@@ -58,7 +58,6 @@ export interface StudentProfile {
   board_10th: string | null
   board_12th: string | null
   mht_cet_score: number | null
-  neet_score: number | null
   other_exam_name: string | null
   other_exam_score: number | null
   budget_min: number | null
