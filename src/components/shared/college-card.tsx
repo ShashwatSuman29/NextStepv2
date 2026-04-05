@@ -47,8 +47,13 @@ export function CollegeCard({
             <img
               src={imagePaths[0]}
               alt={`${name} campus`}
+              loading="lazy"
               className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+              onError={(e) => {
+                const img = e.target as HTMLImageElement
+                img.style.display = 'none'
+                img.parentElement?.classList.add('bg-gradient-to-br', 'from-primary-dark/20', 'to-primary/10')
+              }}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent transition-opacity duration-500 group-hover:from-black/70" />
 

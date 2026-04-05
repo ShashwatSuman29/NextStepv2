@@ -5,6 +5,7 @@ import { updateVisitStatusSchema } from '@/validators/visit'
 import { dispatchNotifications } from '@/lib/notifications/dispatch'
 import { VALID_VISIT_TRANSITIONS } from '@/types'
 import type { VisitStatus } from '@/types'
+import { validateUuidParam } from '@/lib/utils'
 
 /**
  * PATCH /api/admin/visits/[id] — Update status. DISPATCHES notification on change.
@@ -17,6 +18,9 @@ export async function PATCH(
   if (error) return error
 
   const { id } = await params
+  const invalid = validateUuidParam(id)
+  if (invalid) return invalid
+
   const body = await request.json()
   const parsed = updateVisitStatusSchema.safeParse(body)
   if (!parsed.success) {
@@ -61,7 +65,10 @@ export async function PATCH(
     .select()
     .single()
 
-  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 })
+  if (dbError) {
+    console.error('DB error:', dbError.message)
+    return NextResponse.json({ error: 'Operation failed' }, { status: 500 })
+  }
 
   if (newStatus !== currentStatus) {
     await dispatchNotifications(

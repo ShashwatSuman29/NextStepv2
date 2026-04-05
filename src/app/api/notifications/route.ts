@@ -28,7 +28,10 @@ export async function GET(request: Request) {
   }
 
   const { data, error } = await query
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('DB error:', error.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
   return NextResponse.json({ data })
 }
 
@@ -45,6 +48,9 @@ export async function DELETE() {
     .delete()
     .eq('student_id', dbUser.id)
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('DB error:', error.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
   return NextResponse.json({ success: true })
 }

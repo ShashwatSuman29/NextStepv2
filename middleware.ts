@@ -10,23 +10,39 @@ const ratelimit = new Ratelimit({
   analytics: true,
 })
 
+function addSecurityHeaders(response: NextResponse): NextResponse {
+  response.headers.set('X-Frame-Options', 'DENY')
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+  return response
+}
+
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
-  const ip = request.headers.get('x-forwarded-for') ?? '127.0.0.1'
+  // Use the first IP from x-forwarded-for (closest to client) to reduce spoofing
+  const forwardedFor = request.headers.get('x-forwarded-for')
+  const ip = forwardedFor?.split(',')[0]?.trim() || request.headers.get('x-real-ip') || '127.0.0.1'
 
   // ---- Rate Limiting ----
   if (path.startsWith('/api')) {
     if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-      const { success, limit, reset, remaining } = await ratelimit.limit(`ratelimit_${ip}`)
+      // Stricter rate limit for sensitive endpoints
+      const isPaymentRoute = path.startsWith('/api/razorpay')
+      const isBroadcast = path.startsWith('/api/admin/broadcast')
+      const limitKey = isPaymentRoute ? `ratelimit_payment_${ip}` : isBroadcast ? `ratelimit_broadcast_${ip}` : `ratelimit_${ip}`
+
+      const { success, limit, reset, remaining } = await ratelimit.limit(limitKey)
       if (!success) {
-        return new NextResponse(JSON.stringify({ error: 'Too Many Requests' }), {
+        return addSecurityHeaders(new NextResponse(JSON.stringify({ error: 'Too Many Requests' }), {
           status: 429,
           headers: {
+            'Content-Type': 'application/json',
             'X-RateLimit-Limit': limit.toString(),
             'X-RateLimit-Remaining': remaining.toString(),
             'X-RateLimit-Reset': reset.toString(),
           },
-        })
+        }))
       }
     }
   }
@@ -94,7 +110,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return supabaseResponse
+  return addSecurityHeaders(supabaseResponse)
 }
 
 export const config = {

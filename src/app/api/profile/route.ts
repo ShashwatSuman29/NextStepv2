@@ -75,7 +75,8 @@ export async function POST(request: Request) {
     .single()
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('DB error:', error.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 
   await supabase.auth.updateUser({ data: { is_complete } })
@@ -126,7 +127,8 @@ export async function PATCH(request: Request) {
     .single()
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('DB error:', error.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 
   await supabase.auth.updateUser({ data: { is_complete } })

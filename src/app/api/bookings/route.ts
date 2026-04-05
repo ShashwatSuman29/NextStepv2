@@ -22,7 +22,10 @@ export async function GET() {
     .eq('student_id', dbUser.id)
     .order('created_at', { ascending: false })
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('DB error:', error.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
   return NextResponse.json({ data })
 }
 
@@ -145,7 +148,8 @@ export async function POST(request: Request) {
     if (bookingError.code === '23505') {
       return NextResponse.json({ error: 'You already have a booking at this time.' }, { status: 409 })
     }
-    return NextResponse.json({ error: bookingError.message }, { status: 500 })
+    console.error('DB error:', bookingError.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 
   // Increment odometer or decrement purchased credits

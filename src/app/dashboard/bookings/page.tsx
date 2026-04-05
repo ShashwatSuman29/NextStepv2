@@ -97,7 +97,10 @@ export default function BookingsPage() {
     script.async = true
     document.body.appendChild(script)
 
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+      document.body.removeChild(script)
+    }
   }, [])
 
   const handlePayment = async (amount: number) => {

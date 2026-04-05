@@ -11,9 +11,9 @@ export async function GET(request: Request) {
   if (error) return error
 
   const { searchParams } = new URL(request.url)
-  const page = parseInt(searchParams.get('page') || '1')
-  const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '20'), 50)
-  const search = searchParams.get('search')?.trim()
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1') || 1)
+  const pageSize = Math.min(Math.max(1, parseInt(searchParams.get('pageSize') || '20') || 20), 50)
+  const search = searchParams.get('search')
 
   const supabase = createServiceClient()
   const from = (page - 1) * pageSize
@@ -48,22 +48,9 @@ export async function GET(request: Request) {
     .order('created_at', { ascending: false })
     .range(from, from + pageSize - 1)
 
-  if (usersErr) return NextResponse.json({ error: usersErr.message }, { status: 500 })
-  if (!users || users.length === 0) return NextResponse.json({ data: [], count: 0, page, pageSize })
-
-  // Fetch profiles for these users separately (reliable, no join issues)
-  const userIds = users.map((u) => u.id)
-  const { data: profiles } = await supabase
-    .from('student_profiles')
-    .select('*')
-    .in('user_id', userIds)
-
-  // Merge profiles into users
-  const profileMap = new Map((profiles ?? []).map((p) => [p.user_id, p]))
-  const data = users.map((u) => ({
-    ...u,
-    student_profiles: profileMap.has(u.id) ? [profileMap.get(u.id)] : [],
-  }))
-
+  if (dbError) {
+    console.error('DB error:', dbError.message)
+    return NextResponse.json({ error: 'Failed to fetch students' }, { status: 500 })
+  }
   return NextResponse.json({ data, count, page, pageSize })
 }

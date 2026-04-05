@@ -6,7 +6,7 @@ export const createCollegeSchema = z.object({
   state: z.string().min(1, 'State is required').max(100),
   description: z.string().max(5000).nullable().optional(),
   image_paths: z.array(z.string()).default([]),
-  daily_visit_capacity: z.number().int().min(5).max(10).default(5),
+  daily_visit_capacity: z.number().int().min(1).max(500).default(5),
   status: z.enum(['active', 'inactive']).default('inactive'),
   is_featured: z.boolean().default(false),
   fee_min: z.number().int().min(0).nullable().optional(),

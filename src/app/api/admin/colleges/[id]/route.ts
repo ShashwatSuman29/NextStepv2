@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { verifyAdmin } from '@/lib/auth/verify-admin'
 import { createServiceClient } from '@/lib/supabase/server'
 import { updateCollegeSchema } from '@/validators/college'
+import { validateUuidParam } from '@/lib/utils'
 
 /**
  * PATCH /api/admin/colleges/[id] — Update college.
@@ -14,6 +15,9 @@ export async function PATCH(
   if (error) return error
 
   const { id } = await params
+  const invalid = validateUuidParam(id)
+  if (invalid) return invalid
+
   const body = await request.json()
   const parsed = updateCollegeSchema.safeParse(body)
   if (!parsed.success) {
@@ -28,7 +32,10 @@ export async function PATCH(
     .select()
     .single()
 
-  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 })
+  if (dbError) {
+    console.error('DB error:', dbError.message)
+    return NextResponse.json({ error: 'Operation failed' }, { status: 500 })
+  }
   return NextResponse.json({ data })
 }
 
@@ -43,6 +50,9 @@ export async function DELETE(
   if (error) return error
 
   const { id } = await params
+  const invalid = validateUuidParam(id)
+  if (invalid) return invalid
+
   const supabase = createServiceClient()
 
   // Delete all related data first (cascade)
@@ -78,6 +88,9 @@ export async function DELETE(
     .delete()
     .eq('id', id)
 
-  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 })
+  if (dbError) {
+    console.error('DB error:', dbError.message)
+    return NextResponse.json({ error: 'Operation failed' }, { status: 500 })
+  }
   return NextResponse.json({ message: 'College permanently deleted' })
 }

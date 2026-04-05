@@ -1,5 +1,11 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { z } from 'zod'
+
+const settingsUpdateSchema = z.object({
+  counselling_price_inr: z.number().positive().max(100000).optional(),
+  visit_price_inr: z.number().positive().max(100000).optional(),
+})
 
 export async function GET() {
   const supabase = await createClient()
@@ -27,7 +33,7 @@ export async function GET() {
     if (error.code === 'PGRST116') {
       return NextResponse.json({ data: { counselling_price_inr: 199, visit_price_inr: 499 } })
     }
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 
   return NextResponse.json({ data })
@@ -50,8 +56,12 @@ export async function PUT(request: Request) {
   }
 
   const body = await request.json()
-  const counselling_price_inr = body.counselling_price_inr ? Number(body.counselling_price_inr) : 199
-  const visit_price_inr = body.visit_price_inr ? Number(body.visit_price_inr) : 499
+  const parsed = settingsUpdateSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json({ error: parsed.error.issues[0].message }, { status: 400 })
+  }
+  const counselling_price_inr = parsed.data.counselling_price_inr ?? 199
+  const visit_price_inr = parsed.data.visit_price_inr ?? 499
 
   // In Supabase, usually there is exactly 1 row in platform_settings.
   // We can fetch it first to get the ID, or just update using some condition.
@@ -65,7 +75,7 @@ export async function PUT(request: Request) {
       .select()
       .single()
       
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    if (error) return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     return NextResponse.json({ data })
   } else {
     // If it doesn't exist, insert
@@ -75,7 +85,7 @@ export async function PUT(request: Request) {
       .select()
       .single()
       
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    if (error) return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
     return NextResponse.json({ data })
   }
 }

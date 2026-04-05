@@ -135,6 +135,8 @@ export function Navbar({
                   <div className="relative ml-1" ref={dropdownRef}>
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
+                      aria-label="User menu"
+                      aria-expanded={dropdownOpen}
                       className={`flex items-center gap-1.5 rounded-full pl-1.5 pr-2.5 py-1 transition-all duration-200 ${
                         isTransparent
                           ? 'bg-white/10 hover:bg-white/20 border border-white/10'

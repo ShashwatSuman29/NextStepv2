@@ -1,4 +1,14 @@
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
 export function getNotificationEmailHtml(message: string): string {
+  const safeMessage = escapeHtml(message)
   return `
 <!DOCTYPE html>
 <html>
@@ -80,7 +90,7 @@ export function getNotificationEmailHtml(message: string): string {
                         margin:0;
                         font-family:Arial, sans-serif;
                       ">
-                        ${message}
+                        ${safeMessage}
                       </p>
                     </td>
                   </tr>

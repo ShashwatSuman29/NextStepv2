@@ -31,7 +31,8 @@ export async function GET(request: Request) {
     .eq('status', 'active')
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('DB error:', error.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 
   return NextResponse.json({ data })

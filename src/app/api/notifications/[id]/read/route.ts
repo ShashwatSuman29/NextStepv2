@@ -23,6 +23,9 @@ export async function PATCH(
     .eq('id', id)
     .eq('student_id', dbUser.id)
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('DB error:', error.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
   return NextResponse.json({ message: 'Marked as read' })
 }

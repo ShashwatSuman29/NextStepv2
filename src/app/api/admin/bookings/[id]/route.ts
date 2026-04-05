@@ -5,6 +5,7 @@ import { updateBookingStatusSchema } from '@/validators/booking'
 import { dispatchNotifications } from '@/lib/notifications/dispatch'
 import { VALID_BOOKING_TRANSITIONS } from '@/types'
 import type { BookingStatus } from '@/types'
+import { validateUuidParam } from '@/lib/utils'
 
 /**
  * GET /api/admin/bookings/[id] — Single booking with student profile.
@@ -17,6 +18,8 @@ export async function GET(
   if (error) return error
 
   const { id } = await params
+  const invalid = validateUuidParam(id)
+  if (invalid) return invalid
   const supabase = createServiceClient()
 
   const { data, error: dbError } = await supabase
@@ -42,6 +45,9 @@ export async function PATCH(
   if (error) return error
 
   const { id } = await params
+  const invalid = validateUuidParam(id)
+  if (invalid) return invalid
+
   const body = await request.json()
   const parsed = updateBookingStatusSchema.safeParse(body)
   if (!parsed.success) {
@@ -104,7 +110,10 @@ export async function PATCH(
     .select()
     .single()
 
-  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 })
+  if (dbError) {
+    console.error('DB error:', dbError.message)
+    return NextResponse.json({ error: 'Operation failed' }, { status: 500 })
+  }
 
   // Dispatch notification only on actual status change
   if (isStatusChange) {

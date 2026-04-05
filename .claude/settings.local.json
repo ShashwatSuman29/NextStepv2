@@ -68,7 +68,8 @@
       "Bash(find /c/Users/Lenovo/OneDrive/Desktop/nextstepV2 -maxdepth 2 -name *.md -not -path */node_modules/*)",
       "Bash(taskkill /F /IM node.exe)",
       "mcp__Claude_Preview__preview_start",
-      "Bash(taskkill /F /PID 20652)"
+      "Bash(taskkill /F /PID 20652)",
+      "Bash(npx tsc:*)"
     ]
   }
 }

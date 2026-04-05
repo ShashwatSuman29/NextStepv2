@@ -11,8 +11,8 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url)
   const status = searchParams.get('status')
-  const page = parseInt(searchParams.get('page') || '1')
-  const pageSize = Math.min(parseInt(searchParams.get('pageSize') || '20'), 50)
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1') || 1)
+  const pageSize = Math.min(Math.max(1, parseInt(searchParams.get('pageSize') || '20') || 20), 50)
 
   const supabase = createServiceClient()
   let query = supabase
@@ -26,6 +26,9 @@ export async function GET(request: Request) {
     .order('created_at', { ascending: false })
     .range(from, from + pageSize - 1)
 
-  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 })
+  if (dbError) {
+    console.error('DB error:', dbError.message)
+    return NextResponse.json({ error: 'Failed to fetch visits' }, { status: 500 })
+  }
   return NextResponse.json({ data, count, page, pageSize })
 }

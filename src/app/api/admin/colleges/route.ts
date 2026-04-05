@@ -16,7 +16,10 @@ export async function GET() {
     .select('*, college_courses(count)')
     .order('created_at', { ascending: false })
 
-  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 })
+  if (dbError) {
+    console.error('DB error fetching colleges:', dbError.message)
+    return NextResponse.json({ error: 'Failed to fetch colleges' }, { status: 500 })
+  }
   return NextResponse.json({ data })
 }
 
@@ -50,6 +53,9 @@ export async function POST(request: Request) {
     .select()
     .single()
 
-  if (dbError) return NextResponse.json({ error: dbError.message }, { status: 500 })
+  if (dbError) {
+    console.error('DB error creating college:', dbError.message)
+    return NextResponse.json({ error: 'Failed to create college' }, { status: 500 })
+  }
   return NextResponse.json({ data: college }, { status: 201 })
 }

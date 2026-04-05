@@ -65,7 +65,8 @@ export async function GET(request: Request) {
   const { data, count, error } = await query.range(from, to)
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('DB error fetching colleges:', error.message)
+    return NextResponse.json({ error: 'Failed to fetch colleges' }, { status: 500 })
   }
 
   return NextResponse.json({ data, count, page, pageSize })

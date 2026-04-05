@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { validateUuidParam } from '@/lib/utils'
 
 /**
  * DELETE /api/saved/[collegeId] — Unsave a college.
@@ -9,6 +10,8 @@ export async function DELETE(
   { params }: { params: Promise<{ collegeId: string }> }
 ) {
   const { collegeId } = await params
+  const invalid = validateUuidParam(collegeId)
+  if (invalid) return invalid
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -22,6 +25,9 @@ export async function DELETE(
     .eq('student_id', dbUser.id)
     .eq('college_id', collegeId)
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('DB error:', error.message)
+    return NextResponse.json({ error: 'Failed to remove saved college' }, { status: 500 })
+  }
   return NextResponse.json({ message: 'Removed' })
 }

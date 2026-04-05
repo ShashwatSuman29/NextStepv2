@@ -26,8 +26,12 @@ export async function POST(request: Request) {
 
     const { message } = await request.json()
 
-    if (!message || message.trim() === '') {
+    if (!message || typeof message !== 'string' || message.trim() === '') {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 })
+    }
+
+    if (message.length > 5000) {
+      return NextResponse.json({ error: 'Message must be under 5000 characters' }, { status: 400 })
     }
 
     const resendKey = process.env.RESEND_API_KEY
@@ -79,8 +83,8 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, count: sentCount })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Broadcast error:', error)
-    return NextResponse.json({ error: error.message || 'Internal error' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to send broadcast' }, { status: 500 })
   }
 }

@@ -15,7 +15,10 @@ export async function DELETE(
   if (!dbUser) return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
   const { error } = await supabase.from('notifications').delete().eq('id', id).eq('student_id', dbUser.id)
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.error('DB error:', error.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
 
   return NextResponse.json({ success: true })
 }

@@ -8,8 +8,8 @@ export async function GET(request: Request) {
 
   const supabase = createServiceClient()
   const { searchParams } = new URL(request.url)
-  const page = parseInt(searchParams.get('page') || '1')
-  const pageSize = parseInt(searchParams.get('pageSize') || '20')
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1') || 1)
+  const pageSize = Math.min(Math.max(1, parseInt(searchParams.get('pageSize') || '20') || 20), 50)
   const from = (page - 1) * pageSize
   const to = from + pageSize - 1
 
@@ -19,7 +19,10 @@ export async function GET(request: Request) {
     .order('created_at', { ascending: false })
     .range(from, to)
 
-  if (countError) return NextResponse.json({ error: countError.message }, { status: 500 })
+  if (countError) {
+    console.error('DB error:', countError.message)
+    return NextResponse.json({ error: 'Failed to fetch transactions' }, { status: 500 })
+  }
 
   return NextResponse.json({ data, meta: { total: count, page, pageSize } })
 }
