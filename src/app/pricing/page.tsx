@@ -25,18 +25,18 @@ export default async function PricingPage() {
     <div className="min-h-screen bg-background font-sans">
       <Navbar />
 
-      <main className="pb-24 pt-32 sm:pt-40">
-        <div className="mx-auto max-w-7xl px-5 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl" style={{ fontFamily: 'var(--font-serif)' }}>
+      <main className="pb-16 sm:pb-24 pt-24 sm:pt-40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-5 text-center">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-6xl" style={{ fontFamily: 'var(--font-serif)' }}>
             Simple, Transparent <span className="text-primary">Pricing</span>
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+          <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground sm:text-xl">
             Unlock premium features and personal guidance to secure your ideal college admission. No hidden fees.
           </p>
         </div>
 
-        <div className="mx-auto mt-16 max-w-5xl px-5">
-          <div className="grid gap-8 md:grid-cols-2">
+        <div className="mx-auto mt-10 sm:mt-16 max-w-5xl px-4 sm:px-5">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
             
             {/* Counselling Plan */}
             <div className="relative flex flex-col rounded-3xl border border-border/60 bg-card p-8 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lifted">

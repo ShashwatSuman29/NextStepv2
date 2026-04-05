@@ -62,26 +62,26 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
         {/* Content */}
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center pt-16">
           <h1
-            className="text-4xl font-bold leading-[1.08] text-white sm:text-5xl lg:text-[4.5rem] tracking-tight drop-shadow-lg"
+            className="text-3xl font-bold leading-[1.08] text-white sm:text-5xl lg:text-[4.5rem] tracking-tight drop-shadow-lg"
             style={{ fontFamily: 'var(--font-serif)' }}
           >
             Your College Journey,<br />Simplified
           </h1>
 
-          <p className="mx-auto mt-6 max-w-lg text-base text-white/75 sm:text-lg uppercase tracking-[0.15em] font-medium drop-shadow-sm">
+          <p className="mx-auto mt-4 sm:mt-6 max-w-lg text-sm text-white/75 sm:text-lg uppercase tracking-[0.15em] font-medium drop-shadow-sm">
             Admissions, Counselling &amp; Campus Visits
           </p>
 
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div className="mt-8 sm:mt-10 flex flex-col items-center gap-3 sm:gap-4 sm:flex-row sm:justify-center">
             <Link
               href={ctaHref}
-              className="inline-flex items-center justify-center gap-2 border-2 border-white bg-white px-10 py-4 text-[15px] font-bold uppercase tracking-wider text-primary-dark transition-all duration-300 hover:bg-transparent hover:text-white hover:shadow-lg"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border-2 border-white bg-white px-8 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-[15px] font-bold uppercase tracking-wider text-primary-dark transition-all duration-300 hover:bg-transparent hover:text-white hover:shadow-lg"
             >
               {isLoggedIn ? 'Go to Dashboard' : 'Get Started'}
             </Link>
             <Link
               href="/colleges"
-              className="inline-flex items-center justify-center gap-2 border-2 border-white/60 px-10 py-4 text-[15px] font-bold uppercase tracking-wider text-white transition-all duration-300 hover:bg-white hover:text-primary-dark hover:shadow-lg"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border-2 border-white/60 px-8 sm:px-10 py-3.5 sm:py-4 text-sm sm:text-[15px] font-bold uppercase tracking-wider text-white transition-all duration-300 hover:bg-white hover:text-primary-dark hover:shadow-lg"
             >
               Browse Colleges
             </Link>
@@ -99,14 +99,14 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
 
       {/* ============ FEATURED COLLEGES ============ */}
       {colleges.length > 0 && (
-        <section id="featured-colleges" className="relative border-t border-border/40 py-24 px-6">
+        <section id="featured-colleges" className="relative border-t border-border/40 py-16 sm:py-24 px-4 sm:px-6">
           <div className="mx-auto max-w-6xl">
             <AnimatedSection className="flex flex-col items-center justify-between gap-5 sm:flex-row">
-              <div>
+              <div className="text-center sm:text-left">
                 <span className="inline-block rounded-full border border-primary/15 bg-primary/[0.04] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
                   Featured
                 </span>
-                <h2 className="mt-5 text-3xl font-bold text-foreground sm:text-4xl tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
+                <h2 className="mt-5 text-2xl font-bold text-foreground sm:text-3xl lg:text-4xl tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
                   Top colleges on NextStep
                 </h2>
               </div>
@@ -121,7 +121,7 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
               </Link>
             </AnimatedSection>
 
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-8 sm:mt-12 grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {colleges.map((college, i) => (
                 <CollegeCard
                   key={college.id}
@@ -148,19 +148,19 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
       )}
 
       {/* ============ WHY NEXTSTEP — Alternating rows with illustrations ============ */}
-      <section className="relative py-24 px-6 border-t border-border/30 overflow-hidden">
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6 border-t border-border/30 overflow-hidden">
         <div className="relative mx-auto max-w-6xl">
-          <AnimatedSection className="text-center mb-20">
+          <AnimatedSection className="text-center mb-12 sm:mb-20">
             <span className="inline-block rounded-full border border-primary/15 bg-primary/[0.04] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
               Why NextStep
             </span>
-            <h2 className="mt-6 text-3xl font-bold text-foreground sm:text-4xl lg:text-[2.75rem] tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
+            <h2 className="mt-6 text-2xl font-bold text-foreground sm:text-3xl lg:text-[2.75rem] tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
               Everything you need for your<br className="hidden sm:block" /> admission journey
             </h2>
           </AnimatedSection>
 
           {/* Feature 1 — Discover */}
-          <AnimatedSection className="grid items-center gap-10 md:grid-cols-2 lg:gap-16 mb-24">
+          <AnimatedSection className="grid items-center gap-8 md:grid-cols-2 lg:gap-16 mb-16 sm:mb-24">
             <div className="relative flex items-center justify-center">
               <div className="relative w-full max-w-sm mx-auto">
                 <div className="absolute inset-0 rounded-3xl bg-[#E8F0FE] -rotate-3 scale-[1.02]" />
@@ -220,7 +220,7 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
           </AnimatedSection>
 
           {/* Feature 2 — Counselling (reversed) */}
-          <AnimatedSection className="grid items-center gap-10 md:grid-cols-2 lg:gap-16 mb-24">
+          <AnimatedSection className="grid items-center gap-8 md:grid-cols-2 lg:gap-16 mb-16 sm:mb-24">
             <div className="md:order-2 relative flex items-center justify-center">
               <div className="relative w-full max-w-sm mx-auto">
                 <div className="absolute inset-0 rounded-3xl bg-[#FFF3E0] rotate-2 scale-[1.02]" />
@@ -279,7 +279,7 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
           </AnimatedSection>
 
           {/* Feature 3 — Campus Visits */}
-          <AnimatedSection className="grid items-center gap-10 md:grid-cols-2 lg:gap-16">
+          <AnimatedSection className="grid items-center gap-8 md:grid-cols-2 lg:gap-16">
             <div className="relative flex items-center justify-center">
               <div className="relative w-full max-w-sm mx-auto">
                 <div className="absolute inset-0 rounded-3xl bg-[#E8F5E9] -rotate-2 scale-[1.02]" />
@@ -342,10 +342,10 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
       </section>
 
       {/* ============ STATS — compact banner ============ */}
-      <section className="relative overflow-hidden bg-primary-dark py-16 px-6">
+      <section className="relative overflow-hidden bg-primary-dark py-12 sm:py-16 px-4 sm:px-6">
         <div className="absolute -left-32 top-1/2 -translate-y-1/2 h-80 w-80 rounded-full bg-[#6a9b8e]/25 blur-[120px]" />
         <div className="absolute -right-32 top-1/2 -translate-y-1/2 h-80 w-80 rounded-full bg-[#50786d]/18 blur-[120px]" />
-        <div className="relative mx-auto grid max-w-4xl gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="relative mx-auto grid max-w-4xl gap-6 grid-cols-2 lg:grid-cols-4">
           <StatCounter end={20} suffix="+" label="Partner Colleges" />
           <StatCounter end={100} suffix="+" label="Students Guided" />
           <StatCounter end={50} suffix="+" label="Counselling Sessions" />
@@ -354,16 +354,16 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
       </section>
 
       {/* ============ HOW IT WORKS — Vertical timeline ============ */}
-      <section className="relative py-28 px-6 overflow-hidden">
+      <section className="relative py-16 sm:py-28 px-4 sm:px-6 overflow-hidden">
         {/* Subtle background gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />
 
         <div className="relative mx-auto max-w-3xl">
-          <AnimatedSection className="text-center mb-20">
+          <AnimatedSection className="text-center mb-12 sm:mb-20">
             <span className="inline-block rounded-full border border-primary/15 bg-primary/[0.04] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
               How It Works
             </span>
-            <h2 className="mt-6 text-3xl font-bold text-foreground sm:text-4xl lg:text-[2.75rem] tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
+            <h2 className="mt-6 text-2xl font-bold text-foreground sm:text-3xl lg:text-[2.75rem] tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
               Three steps to your dream college
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-[15px] text-muted-foreground leading-relaxed">
@@ -446,15 +446,15 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
       </section>
 
       {/* ============ TESTIMONIALS ============ */}
-      <section className="relative border-t border-border/40 py-32 overflow-hidden">
+      <section className="relative border-t border-border/40 py-16 sm:py-32 overflow-hidden">
         <div className="absolute inset-0 mesh-gradient opacity-30" />
 
-        <div className="relative mx-auto max-w-4xl px-6">
+        <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
           <AnimatedSection className="text-center">
             <span className="inline-block rounded-full border border-primary/15 bg-primary/[0.04] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
               Student Stories
             </span>
-            <h2 className="mt-6 text-3xl font-bold text-foreground sm:text-4xl tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
+            <h2 className="mt-6 text-2xl font-bold text-foreground sm:text-3xl lg:text-4xl tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
               Hear from students who<br className="hidden sm:block" /> found their path
             </h2>
           </AnimatedSection>
@@ -480,7 +480,7 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
       />
 
       {/* ============ CTA — Stripe-style final section ============ */}
-      <section className="relative overflow-hidden py-32 px-6">
+      <section className="relative overflow-hidden py-16 sm:py-32 px-4 sm:px-6">
         <div className="absolute inset-0 bg-primary-dark" />
 
         {/* Gradient mesh */}
@@ -499,16 +499,16 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
         />
 
         <AnimatedSection variant="scaleIn" className="relative mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
+          <h2 className="text-2xl font-bold text-white sm:text-3xl lg:text-5xl tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
             Ready to take the<br /> next step?
           </h2>
-          <p className="mt-6 text-lg text-white/45 leading-relaxed">
+          <p className="mt-4 sm:mt-6 text-base sm:text-lg text-white/45 leading-relaxed">
             Join thousands of students who are already navigating their college journey with confidence.
           </p>
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+          <div className="mt-8 sm:mt-10 flex flex-col items-center gap-3 sm:gap-4 sm:flex-row sm:justify-center">
             <Link
               href={ctaHref}
-              className="group inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[15px] font-semibold text-primary-dark shadow-lg shadow-black/10 transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 rounded-full bg-white px-8 py-3.5 sm:py-4 text-sm sm:text-[15px] font-semibold text-primary-dark shadow-lg shadow-black/10 transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
             >
               {isLoggedIn ? 'Go to Dashboard' : 'Start your journey'}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform group-hover:translate-x-0.5">
@@ -517,7 +517,7 @@ export function LandingClient({ colleges }: { colleges: FeaturedCollege[] }) {
             </Link>
             <Link
               href="/colleges"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 px-8 py-4 text-[15px] font-medium text-white/80 transition-all duration-300 hover:bg-white/[0.06] hover:border-white/25 hover:text-white"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-8 py-3.5 sm:py-4 text-sm sm:text-[15px] font-medium text-white/80 transition-all duration-300 hover:bg-white/[0.06] hover:border-white/25 hover:text-white"
             >
               Explore colleges
             </Link>

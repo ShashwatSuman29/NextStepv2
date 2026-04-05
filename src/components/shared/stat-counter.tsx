@@ -38,7 +38,7 @@ export function StatCounter({ end, suffix = '', prefix = '', label, duration = 2
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="text-center"
     >
-      <p className="text-5xl font-bold text-white md:text-6xl" style={{ fontFamily: 'var(--font-sans)' }}>
+      <p className="text-3xl font-bold text-white sm:text-5xl md:text-6xl" style={{ fontFamily: 'var(--font-sans)' }}>
         {prefix}{count.toLocaleString('en-IN')}{suffix}
       </p>
       <div className="mx-auto mt-3 h-px w-8 bg-gradient-to-r from-transparent via-white/20 to-transparent" />

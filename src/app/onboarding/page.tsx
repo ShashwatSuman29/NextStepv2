@@ -160,7 +160,7 @@ export default function OnboardingPage() {
                     <span className="text-[10px] text-muted-foreground">{s.desc}</span>
                   </div>
                   {i < STEPS.length - 1 && (
-                    <div className={`mx-3 mb-8 h-0.5 w-16 rounded-full transition-colors duration-500 sm:w-24 ${
+                    <div className={`mx-1.5 sm:mx-3 mb-8 h-0.5 w-8 sm:w-16 md:w-24 rounded-full transition-colors duration-500 ${
                       s.number < step ? 'bg-primary' : 'bg-border'
                     }`} />
                   )}
@@ -208,7 +208,7 @@ export default function OnboardingPage() {
                     <label className="block text-sm font-medium text-foreground">Phone Number <span className="text-destructive">*</span></label>
                     <input type="tel" value={form.phone} onChange={(e) => update('phone', e.target.value.replace(/[^0-9+]/g, ''))} className={inputClass} placeholder="e.g., 9876543210" maxLength={15} />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-foreground">City <span className="text-destructive">*</span></label>
                       <input type="text" value={form.city} onChange={(e) => update('city', e.target.value)} className={inputClass} placeholder="e.g., Mumbai" />

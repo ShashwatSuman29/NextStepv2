@@ -309,7 +309,7 @@ function ComparePageContent() {
                       initial={{ opacity: 0, y: 4 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 4 }}
-                      className="absolute left-0 top-full z-20 mt-2 w-96 max-h-80 overflow-hidden rounded-xl border border-border bg-card shadow-lifted"
+                      className="absolute left-0 top-full z-20 mt-2 w-[calc(100vw-3rem)] sm:w-96 max-h-80 overflow-hidden rounded-xl border border-border bg-card shadow-lifted"
                     >
                       {/* Search input */}
                       <div className="border-b border-border p-3">

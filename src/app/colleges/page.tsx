@@ -158,46 +158,50 @@ function CollegesContent() {
 
       <div className="mx-auto w-full max-w-7xl px-5 py-8">
         {/* Search bar */}
-        <form onSubmit={handleSearch} className="flex gap-3">
-          <div className="flex-1 relative">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground">
-              <path d="M14 14l-4-4m1.333-3.333a4.667 4.667 0 11-9.333 0 4.667 4.667 0 019.333 0z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-            <input
-              type="text"
-              value={filters.search}
-              onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
-              placeholder="Search by college name..."
-              className="w-full rounded-xl border border-border bg-card py-3 pl-10 pr-4 text-sm transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-            />
+        <form onSubmit={handleSearch} className="space-y-3">
+          <div className="flex gap-2">
+            <div className="flex-1 relative">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground">
+                <path d="M14 14l-4-4m1.333-3.333a4.667 4.667 0 11-9.333 0 4.667 4.667 0 019.333 0z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              <input
+                type="text"
+                value={filters.search}
+                onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
+                placeholder="Search by college name..."
+                className="w-full rounded-xl border border-border bg-card py-3 pl-10 pr-4 text-sm transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
+            <button type="submit" className="shrink-0 rounded-xl bg-primary px-5 sm:px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/90 hover:-translate-y-0.5">
+              Search
+            </button>
           </div>
-          <button type="submit" className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:bg-primary/90 hover:-translate-y-0.5">
-            Search
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowFilters(!showFilters)}
-            className={`relative flex items-center gap-2 rounded-xl border px-5 py-3 text-sm font-semibold transition-all ${
-              showFilters ? 'border-primary bg-primary/5 text-primary' : 'border-border text-foreground hover:bg-accent'
-            }`}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            Filters
-            {activeFilterCount > 0 && (
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">{activeFilterCount}</span>
-            )}
-          </button>
-          <Link
-            href="/colleges/compare"
-            className="flex items-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-semibold text-foreground transition-all hover:bg-accent"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-              <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-            Compare
-          </Link>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setShowFilters(!showFilters)}
+              className={`relative flex flex-1 sm:flex-none items-center justify-center gap-2 rounded-xl border px-4 sm:px-5 py-2.5 text-sm font-semibold transition-all ${
+                showFilters ? 'border-primary bg-primary/5 text-primary' : 'border-border text-foreground hover:bg-accent'
+              }`}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Filters
+              {activeFilterCount > 0 && (
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">{activeFilterCount}</span>
+              )}
+            </button>
+            <Link
+              href="/colleges/compare"
+              className="flex flex-1 sm:flex-none items-center justify-center gap-2 rounded-xl border border-border px-4 sm:px-5 py-2.5 text-sm font-semibold text-foreground transition-all hover:bg-accent"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              Compare
+            </Link>
+          </div>
         </form>
 
         {/* Filter Panel */}

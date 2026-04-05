@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { profileSchema, profileUpdateSchema, computeIsComplete } from '@/validators/profile'
 import type { ProfileInput } from '@/validators/profile'
@@ -33,9 +33,12 @@ export async function GET() {
  * Uses service client for DB writes (bypasses RLS).
  */
 export async function POST(request: Request) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const authClient = await createClient()
+  const { data: { user } } = await authClient.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Service client for all DB operations — bypasses RLS
+  const supabase = createServiceClient()
 
   const { data: dbUser } = await supabase
     .from('users')
@@ -76,21 +79,25 @@ export async function POST(request: Request) {
 
   if (error) {
     console.error('DB error:', error.message)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  await supabase.auth.updateUser({ data: { is_complete } })
+  await authClient.auth.updateUser({ data: { is_complete } })
 
   return NextResponse.json({ data: profile }, { status: 201 })
 }
 
 /**
  * PATCH /api/profile — Update own profile. Re-evaluates is_complete.
+ * Uses service client for DB writes (bypasses RLS).
  */
 export async function PATCH(request: Request) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const authClient = await createClient()
+  const { data: { user } } = await authClient.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  // Service client for all DB operations — bypasses RLS
+  const supabase = createServiceClient()
 
   const { data: dbUser } = await supabase
     .from('users')
@@ -128,10 +135,10 @@ export async function PATCH(request: Request) {
 
   if (error) {
     console.error('DB error:', error.message)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  await supabase.auth.updateUser({ data: { is_complete } })
+  await authClient.auth.updateUser({ data: { is_complete } })
 
   return NextResponse.json({ data: profile })
 }

@@ -51,7 +51,7 @@ export function CollegeDetailClient({
             }}
           />
         )}
-        <div className="relative mx-auto max-w-5xl py-20 px-5">
+        <div className="relative mx-auto max-w-5xl py-12 sm:py-20 px-4 sm:px-5">
           <AnimatedSection>
             <Link href="/colleges" className="group inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm px-4 py-1.5 text-sm text-white/70 hover:text-white hover:bg-white/15 transition-all mb-6">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="transition-transform group-hover:-translate-x-0.5">
@@ -61,7 +61,7 @@ export function CollegeDetailClient({
             </Link>
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
-                <h1 className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl tracking-tight leading-tight">{c.name}</h1>
+                <h1 className="text-2xl font-bold text-white sm:text-3xl lg:text-5xl tracking-tight leading-tight">{c.name}</h1>
                 <div className="mt-4 flex flex-wrap items-center gap-2.5">
                   <span className="flex items-center gap-1.5 text-white/70 text-sm">
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -85,7 +85,7 @@ export function CollegeDetailClient({
             </div>
 
             {/* Quick stats bar */}
-            <div className="mt-8 flex flex-wrap gap-6">
+            <div className="mt-6 sm:mt-8 grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:gap-6">
               {c.placement_rate != null && (
                 <div className="flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-400/15">
@@ -110,11 +110,11 @@ export function CollegeDetailClient({
               )}
               {(c.fee_min || c.fee_max) && (
                 <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-400/15">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-purple-400/15">
                     <span className="text-base font-bold text-purple-400">₹</span>
                   </div>
-                  <div>
-                    <p className="text-lg font-bold text-white">₹{c.fee_min?.toLocaleString('en-IN') ?? '—'} – ₹{c.fee_max?.toLocaleString('en-IN') ?? '—'}</p>
+                  <div className="min-w-0">
+                    <p className="text-sm sm:text-lg font-bold text-white truncate">₹{c.fee_min?.toLocaleString('en-IN') ?? '—'} – ₹{c.fee_max?.toLocaleString('en-IN') ?? '—'}</p>
                     <p className="text-[10px] text-white/50 uppercase tracking-wider">Fee Range / Year</p>
                   </div>
                 </div>
@@ -153,13 +153,13 @@ export function CollegeDetailClient({
                   <>
                     <button
                       onClick={() => setActivePhotoIndex(activePhotoIndex === 0 ? c.image_paths.length - 1 : activePhotoIndex - 1)}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-black/60"
                     >
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </button>
                     <button
                       onClick={() => setActivePhotoIndex(activePhotoIndex === c.image_paths.length - 1 ? 0 : activePhotoIndex + 1)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/60"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-black/60"
                     >
                       <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                     </button>
@@ -198,7 +198,7 @@ export function CollegeDetailClient({
             )}
 
             {/* Key Stats Grid — Premium style */}
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
               {(c.fee_min || c.fee_max) && (
                 <div className="rounded-xl border border-purple-100 bg-gradient-to-br from-purple-50 to-white p-5 transition-all hover:shadow-soft">
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-100 mb-3">

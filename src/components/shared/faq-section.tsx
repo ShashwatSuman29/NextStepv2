@@ -19,13 +19,13 @@ export function FAQSection({ title = 'Frequently Asked Questions', subtitle, ite
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
-    <section className={`py-24 px-6 ${className}`}>
+    <section className={`py-14 sm:py-24 px-4 sm:px-6 ${className}`}>
       <div className="mx-auto max-w-3xl">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 sm:mb-12">
           <span className="inline-block rounded-full border border-primary/15 bg-primary/[0.04] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
             FAQ
           </span>
-          <h2 className="mt-6 text-3xl font-bold text-foreground sm:text-4xl tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
+          <h2 className="mt-6 text-2xl font-bold text-foreground sm:text-3xl lg:text-4xl tracking-tight" style={{ fontFamily: 'var(--font-serif)' }}>
             {title}
           </h2>
           {subtitle && (
