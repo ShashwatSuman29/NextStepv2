@@ -1,15 +1,20 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+/**
+ * DELETE /api/notifications/[id] — Delete one notification.
+ * Uses service client for DB writes — RLS only has SELECT policy for students.
+ */
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const authClient = await createClient()
+  const { data: { user } } = await authClient.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { id } = await params
+  const supabase = createServiceClient()
 
   const { data: dbUser } = await supabase.from('users').select('id').eq('auth_id', user.id).single()
   if (!dbUser) return NextResponse.json({ error: 'User not found' }, { status: 404 })
