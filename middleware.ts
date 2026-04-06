@@ -3,11 +3,35 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
-// Create a new ratelimiter that allows 30 requests per 10 seconds
+// Default rate limiter: 30 requests per 10 seconds
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.slidingWindow(30, '10 s'),
   analytics: true,
+})
+
+// Strict rate limiter for auth endpoints: 6 requests per 60 seconds
+const authRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(6, '60 s'),
+  analytics: true,
+  prefix: 'ratelimit:auth',
+})
+
+// Strict rate limiter for payment endpoints: 10 requests per 60 seconds
+const paymentRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(10, '60 s'),
+  analytics: true,
+  prefix: 'ratelimit:payment',
+})
+
+// Very strict for broadcast: 3 requests per 60 seconds
+const broadcastRatelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(3, '60 s'),
+  analytics: true,
+  prefix: 'ratelimit:broadcast',
 })
 
 function addSecurityHeaders(response: NextResponse): NextResponse {
@@ -27,12 +51,17 @@ export async function middleware(request: NextRequest) {
   // ---- Rate Limiting ----
   if (path.startsWith('/api')) {
     if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-      // Stricter rate limit for sensitive endpoints
+      // Pick the appropriate rate limiter based on route
+      const isAuthRoute = path.startsWith('/api/auth')
       const isPaymentRoute = path.startsWith('/api/razorpay')
       const isBroadcast = path.startsWith('/api/admin/broadcast')
-      const limitKey = isPaymentRoute ? `ratelimit_payment_${ip}` : isBroadcast ? `ratelimit_broadcast_${ip}` : `ratelimit_${ip}`
 
-      const { success, limit, reset, remaining } = await ratelimit.limit(limitKey)
+      const limiter = isAuthRoute ? authRatelimit
+        : isPaymentRoute ? paymentRatelimit
+        : isBroadcast ? broadcastRatelimit
+        : ratelimit
+
+      const { success, limit, reset, remaining } = await limiter.limit(ip)
       if (!success) {
         return addSecurityHeaders(new NextResponse(JSON.stringify({ error: 'Too Many Requests' }), {
           status: 429,

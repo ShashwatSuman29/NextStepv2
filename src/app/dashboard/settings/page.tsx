@@ -149,7 +149,7 @@ export default function SettingsPage() {
                 <input type="text" value={(profile.full_name as string) || ''} onChange={(e) => setProfile({ ...profile, full_name: e.target.value })} className={inputClass} />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-foreground">Phone Number</label>
                   <input type="tel" value={(profile.phone as string) || ''} onChange={(e) => setProfile({ ...profile, phone: e.target.value })} className={inputClass} placeholder="+91 XXXXXXXXXX" />
@@ -170,7 +170,7 @@ export default function SettingsPage() {
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-foreground">City</label>
                   <input type="text" value={(profile.city as string) || ''} onChange={(e) => setProfile({ ...profile, city: e.target.value })} className={inputClass} />
@@ -189,7 +189,7 @@ export default function SettingsPage() {
                 <textarea value={(profile.address as string) || ''} onChange={(e) => setProfile({ ...profile, address: e.target.value })} className={`${inputClass} resize-none`} rows={2} placeholder="Full postal address" />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-foreground">Pincode</label>
                   <input type="text" value={(profile.pincode as string) || ''} onChange={(e) => setProfile({ ...profile, pincode: e.target.value })} className={inputClass} placeholder="e.g. 400001" />
@@ -198,7 +198,7 @@ export default function SettingsPage() {
 
               <div className="border-t border-border/40 pt-5 space-y-4">
                 <h3 className="text-sm font-bold text-foreground">Parent / Guardian Details</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-foreground">Parent Name</label>
                     <input type="text" value={(profile.parent_name as string) || ''} onChange={(e) => setProfile({ ...profile, parent_name: e.target.value })} className={inputClass} />
@@ -222,7 +222,7 @@ export default function SettingsPage() {
 
               <div className="rounded-xl border border-border/40 bg-muted/20 p-4 space-y-4">
                 <h3 className="text-sm font-bold text-foreground">Class 10th</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-foreground">Marks (%)</label>
                     <input type="number" step="0.01" min="0" max="100" value={(profile.marks_10th as number) ?? ''} onChange={(e) => setProfile({ ...profile, marks_10th: e.target.value ? parseFloat(e.target.value) : null })} className={inputClass} placeholder="e.g. 92.5" />
@@ -241,7 +241,7 @@ export default function SettingsPage() {
                   <label htmlFor="appearing_12th" className="text-sm text-foreground">Currently appearing for 12th</label>
                 </div>
                 {!(profile.appearing_12th as boolean) && (
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-foreground">Marks (%)</label>
                       <input type="number" step="0.01" min="0" max="100" value={(profile.marks_12th as number) ?? ''} onChange={(e) => setProfile({ ...profile, marks_12th: e.target.value ? parseFloat(e.target.value) : null })} className={inputClass} placeholder="e.g. 88.0" />
@@ -264,7 +264,7 @@ export default function SettingsPage() {
                 <p className="mt-0.5 text-xs text-muted-foreground">Your competitive exam scores help us suggest better colleges.</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="rounded-xl border border-border/40 bg-muted/20 p-4 space-y-3">
                   <h3 className="text-sm font-bold text-foreground">JEE Main</h3>
                   <div>
@@ -284,7 +284,7 @@ export default function SettingsPage() {
 
               <div className="rounded-xl border border-border/40 bg-muted/20 p-4 space-y-3">
                 <h3 className="text-sm font-bold text-foreground">Other Exam</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-foreground">Exam Name</label>
                     <input type="text" value={(profile.other_exam_name as string) || ''} onChange={(e) => setProfile({ ...profile, other_exam_name: e.target.value })} className={inputClass} placeholder="e.g. BITSAT, VITEEE" />
@@ -323,7 +323,7 @@ export default function SettingsPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-foreground">Desired Course</label>
                   <input type="text" value={(profile.desired_course as string) || ''} onChange={(e) => setProfile({ ...profile, desired_course: e.target.value })} className={inputClass} placeholder="e.g. B.Tech, BBA, MBA" />
@@ -336,7 +336,7 @@ export default function SettingsPage() {
 
               <div className="rounded-xl border border-border/40 bg-muted/20 p-4 space-y-4">
                 <h3 className="text-sm font-bold text-foreground">Budget Range (INR/year)</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-foreground">Minimum</label>
                     <input type="number" min="0" value={(profile.budget_min as number) ?? ''} onChange={(e) => setProfile({ ...profile, budget_min: e.target.value ? parseInt(e.target.value) : null })} className={inputClass} placeholder="e.g. 50000" />

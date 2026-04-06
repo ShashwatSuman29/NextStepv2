@@ -162,7 +162,7 @@ export function CollegeCard({
       </Link>
 
       {/* Save toggle */}
-      <SaveToggle collegeId={id} className={`absolute ${hasImage ? 'top-[160px]' : 'top-5'} right-4 h-9 w-9 rounded-xl bg-card/90 backdrop-blur-sm shadow-md border border-border/30 transition-all hover:scale-110 hover:shadow-lifted z-10`} size={16} />
+      <SaveToggle collegeId={id} className={`absolute ${hasImage ? 'top-[160px]' : 'top-5'} right-4 h-11 w-11 rounded-xl bg-card/90 backdrop-blur-sm shadow-md border border-border/30 transition-all hover:scale-110 hover:shadow-lifted z-10`} size={18} />
     </motion.div>
   )
 }

@@ -48,17 +48,6 @@ export async function POST(request: Request) {
 
   if (!dbUser) return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
-  // Check if profile already exists
-  const { data: existing } = await supabase
-    .from('student_profiles')
-    .select('id')
-    .eq('user_id', dbUser.id)
-    .single()
-
-  if (existing) {
-    return NextResponse.json({ error: 'Profile already exists. Use PATCH to update.' }, { status: 409 })
-  }
-
   const body = await request.json()
   const parsed = profileSchema.safeParse(body)
   if (!parsed.success) {
@@ -69,11 +58,14 @@ export async function POST(request: Request) {
 
   const { data: profile, error } = await supabase
     .from('student_profiles')
-    .insert({
-      user_id: dbUser.id,
-      ...parsed.data,
-      is_complete,
-    })
+    .upsert(
+      {
+        user_id: dbUser.id,
+        ...parsed.data,
+        is_complete,
+      },
+      { onConflict: 'user_id' }
+    )
     .select()
     .single()
 

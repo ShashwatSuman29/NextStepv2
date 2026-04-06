@@ -28,28 +28,48 @@ export default function NotificationsPage() {
   }
 
   const markAsRead = async (id: string) => {
-    await fetch(`/api/notifications/${id}/read`, { method: 'PATCH' })
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n))
+    const prev = notifications
+    setNotifications(p => p.map(n => n.id === id ? { ...n, is_read: true } : n))
+    const res = await fetch(`/api/notifications/${id}/read`, { method: 'PATCH' })
+    if (!res.ok) {
+      setNotifications(prev) // rollback
+      return
+    }
     notifyBadge()
   }
 
   const markAllRead = async () => {
-    await fetch('/api/notifications/read-all', { method: 'PATCH' })
-    setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
+    const prev = notifications
+    setNotifications(p => p.map(n => ({ ...n, is_read: true })))
+    const res = await fetch('/api/notifications/read-all', { method: 'PATCH' })
+    if (!res.ok) {
+      setNotifications(prev) // rollback
+      return
+    }
     notifyBadge()
   }
 
   const deleteNotification = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation()
-    await fetch(`/api/notifications/${id}`, { method: 'DELETE' })
-    setNotifications(prev => prev.filter(n => n.id !== id))
+    const prev = notifications
+    setNotifications(p => p.filter(n => n.id !== id))
+    const res = await fetch(`/api/notifications/${id}`, { method: 'DELETE' })
+    if (!res.ok) {
+      setNotifications(prev) // rollback
+      return
+    }
     notifyBadge()
   }
 
   const deleteAll = async () => {
     if (!confirm('Are you sure you want to delete all notifications?')) return
-    await fetch('/api/notifications', { method: 'DELETE' })
+    const prev = notifications
     setNotifications([])
+    const res = await fetch('/api/notifications', { method: 'DELETE' })
+    if (!res.ok) {
+      setNotifications(prev) // rollback
+      return
+    }
     notifyBadge()
   }
 

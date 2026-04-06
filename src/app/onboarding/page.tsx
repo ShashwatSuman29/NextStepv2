@@ -68,7 +68,7 @@ export default function OnboardingPage() {
       marks_10th: parseFloat(form.marks_10th),
       marks_12th: parseFloat(form.marks_12th),
       appearing_12th: form.appearing_12th,
-      jee_rank: parseInt(form.jee_rank),
+      jee_rank: form.jee_rank ? parseInt(form.jee_rank) : null,
       desired_course: form.desired_course,
       desired_branch: form.desired_branch || null,
       stream: form.stream,
@@ -269,7 +269,7 @@ export default function OnboardingPage() {
                     )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-foreground">JEE Rank <span className="text-destructive">*</span></label>
+                    <label className="block text-sm font-medium text-foreground">JEE Rank <span className="text-muted-foreground text-xs">(optional)</span></label>
                     <input type="number" min="1" value={form.jee_rank} onChange={(e) => update('jee_rank', e.target.value)} className={inputClass} placeholder="e.g., 15000" />
                   </div>
                   <div className="flex gap-3">
@@ -281,7 +281,6 @@ export default function OnboardingPage() {
                       onClick={() => {
                         if (!form.marks_10th) { setError('10th marks are required'); return }
                         if (!form.marks_12th) { setError('12th marks are required'); return }
-                        if (!form.jee_rank) { setError('JEE rank is required'); return }
                         setError(''); goTo(3)
                       }}
                       className="flex-1 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-md transition-all duration-300 hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
