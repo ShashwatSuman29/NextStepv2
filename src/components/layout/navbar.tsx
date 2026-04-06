@@ -208,7 +208,7 @@ export function Navbar({
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className={`relative flex h-9 w-9 items-center justify-center rounded-full md:hidden transition-colors ${
+              className={`relative flex h-11 w-11 items-center justify-center rounded-full md:hidden transition-colors ${
                 isTransparent ? 'text-white hover:bg-white/10' : 'text-foreground hover:bg-accent'
               }`}
               aria-label="Menu"

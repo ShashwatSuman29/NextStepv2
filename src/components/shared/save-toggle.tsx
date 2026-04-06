@@ -12,7 +12,22 @@ interface SaveToggleProps {
 let savedIdsCache: Promise<string[] | null> | null = null
 let cacheTimestamp = 0
 
+function isKnownLoggedOut(): boolean {
+  try { return sessionStorage.getItem('ns_no_auth') === '1' } catch { return false }
+}
+
+function setKnownLoggedOut() {
+  try { sessionStorage.setItem('ns_no_auth', '1') } catch { /* ignore */ }
+}
+
+function clearKnownLoggedOut() {
+  try { sessionStorage.removeItem('ns_no_auth') } catch { /* ignore */ }
+}
+
 function getSavedIds(): Promise<string[] | null> {
+  // If we already know the user is not logged in, skip the request entirely
+  if (isKnownLoggedOut()) return Promise.resolve(null)
+
   const now = Date.now()
   // Reuse cache for 10 seconds
   if (savedIdsCache && now - cacheTimestamp < 10000) return savedIdsCache
@@ -20,7 +35,10 @@ function getSavedIds(): Promise<string[] | null> {
   cacheTimestamp = now
   savedIdsCache = fetch('/api/saved')
     .then(res => {
-      if (res.status === 401) return null // not logged in
+      if (res.status === 401) {
+        setKnownLoggedOut() // persist: no further requests this session
+        return null
+      }
       if (!res.ok) return null
       return res.json()
     })
@@ -33,10 +51,16 @@ function getSavedIds(): Promise<string[] | null> {
   return savedIdsCache
 }
 
-// Invalidate cache after save/unsave
-function invalidateCache() {
+// Reset logged-out flag (called on save/unsave — user is authenticated)
+function resetAuthState() {
+  clearKnownLoggedOut()
   savedIdsCache = null
   cacheTimestamp = 0
+}
+
+// Invalidate cache after save/unsave
+function invalidateCache() {
+  resetAuthState()
 }
 
 export function SaveToggle({ collegeId, className = '', size = 18 }: SaveToggleProps) {

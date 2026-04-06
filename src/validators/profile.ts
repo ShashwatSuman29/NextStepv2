@@ -8,7 +8,7 @@ export const profileSchema = z.object({
   marks_10th: z.number().min(0).max(100, 'Must be between 0 and 100'),
   marks_12th: z.number().min(0).max(100, '12th marks must be between 0 and 100'),
   appearing_12th: z.boolean().default(false),
-  jee_rank: z.number().int().positive('JEE rank must be a positive number'),
+  jee_rank: z.number().int().positive('JEE rank must be a positive number').nullable().optional(),
   desired_course: z.string().min(1, 'Desired course is required').max(100),
   desired_branch: z.string().max(100).nullable().optional(),
   stream: z.enum(['UG', 'PG']),
@@ -42,13 +42,9 @@ export function computeIsComplete(data: ProfileInput): boolean {
     !!data.phone &&
     data.marks_10th != null &&
     data.marks_12th != null &&
-    data.jee_rank != null &&
     !!data.desired_course &&
-    !!data.desired_branch &&
     !!data.stream &&
     !!data.city &&
-    !!data.state &&
-    data.budget_min != null &&
-    data.budget_max != null
+    !!data.state
   )
 }

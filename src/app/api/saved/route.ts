@@ -1,5 +1,6 @@
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { isValidUuid } from '@/lib/utils'
 
 /**
  * GET /api/saved — Own saved colleges.
@@ -39,7 +40,9 @@ export async function POST(request: Request) {
   const body = await request.json()
   const { college_id } = body
 
-  if (!college_id) return NextResponse.json({ error: 'college_id required' }, { status: 400 })
+  if (!college_id || typeof college_id !== 'string' || !isValidUuid(college_id)) {
+    return NextResponse.json({ error: 'Valid college_id (UUID) is required' }, { status: 400 })
+  }
 
   // Max 10 check
   const { count } = await supabase

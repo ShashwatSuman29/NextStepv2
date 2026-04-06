@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { validateUuidParam } from '@/lib/utils'
 
 /**
  * GET /api/colleges/[id] — Public. Single college + courses.
@@ -9,6 +10,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
+  const invalid = validateUuidParam(id)
+  if (invalid) return invalid
+
   const supabase = await createClient()
 
   const { data: college, error } = await supabase

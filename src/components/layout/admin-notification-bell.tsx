@@ -104,7 +104,7 @@ export function AdminNotificationBell() {
     <div ref={containerRef} className="relative">
       <button
         onClick={handleToggle}
-        className="relative flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-all duration-200 hover:bg-primary/5 hover:text-primary"
+        className="relative flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition-all duration-200 hover:bg-primary/5 hover:text-primary"
         aria-label="Admin Notifications"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">

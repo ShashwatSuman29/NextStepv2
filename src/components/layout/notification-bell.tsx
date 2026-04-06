@@ -65,7 +65,6 @@ export function NotificationBell({ initialUnreadCount }: { initialUnreadCount: n
   // Listen for external updates (e.g. from notifications page)
   useEffect(() => {
     const handleUpdate = () => {
-      setUnreadCount(0)
       fetchNotifications()
     }
     window.addEventListener('notifications-updated', handleUpdate)
@@ -81,21 +80,29 @@ export function NotificationBell({ initialUnreadCount }: { initialUnreadCount: n
   }
 
   const markAsRead = async (id: string) => {
-    // Optimistic update
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n))
-    setUnreadCount(prev => Math.max(0, prev - 1))
-    await fetch(`/api/notifications/${id}/read`, { method: 'PATCH' })
-    // Sync badge component
-    window.dispatchEvent(new Event('notifications-updated'))
+    const prev = notifications
+    const prevCount = unreadCount
+    setNotifications(p => p.map(n => n.id === id ? { ...n, is_read: true } : n))
+    setUnreadCount(c => Math.max(0, c - 1))
+    const res = await fetch(`/api/notifications/${id}/read`, { method: 'PATCH' })
+    if (!res.ok) {
+      setNotifications(prev)
+      setUnreadCount(prevCount)
+      return
+    }
   }
 
   const markAllAsRead = async () => {
-    // Optimistic update
-    setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
+    const prev = notifications
+    const prevCount = unreadCount
+    setNotifications(p => p.map(n => ({ ...n, is_read: true })))
     setUnreadCount(0)
-    await fetch('/api/notifications/read-all', { method: 'PATCH' })
-    // Sync badge component
-    window.dispatchEvent(new Event('notifications-updated'))
+    const res = await fetch('/api/notifications/read-all', { method: 'PATCH' })
+    if (!res.ok) {
+      setNotifications(prev)
+      setUnreadCount(prevCount)
+      return
+    }
   }
 
   const typeColor = (type: string) => {
@@ -116,7 +123,7 @@ export function NotificationBell({ initialUnreadCount }: { initialUnreadCount: n
     <div ref={containerRef} className="relative">
       <button
         onClick={handleToggle}
-        className="relative flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-all duration-200 hover:bg-primary/5 hover:text-primary"
+        className="relative flex h-10 w-10 items-center justify-center rounded-xl text-muted-foreground transition-all duration-200 hover:bg-primary/5 hover:text-primary"
         aria-label="Notifications"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
