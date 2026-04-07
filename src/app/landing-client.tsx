@@ -1,15 +1,18 @@
 'use client'
 
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import { Navbar } from '@/components/layout/navbar'
 import { Footer } from '@/components/layout/footer'
 import { AnimatedSection } from '@/components/shared/animated-section'
-import { StatCounter } from '@/components/shared/stat-counter'
-import { TestimonialCarousel } from '@/components/shared/testimonial-carousel'
 import { CollegeCard } from '@/components/shared/college-card'
-import { FAQSection } from '@/components/shared/faq-section'
 import { createClient } from '@/lib/supabase/client'
+
+// Lazy-load below-fold heavy components — reduces initial JS bundle
+const StatCounter = dynamic(() => import('@/components/shared/stat-counter').then(m => ({ default: m.StatCounter })), { ssr: false })
+const TestimonialCarousel = dynamic(() => import('@/components/shared/testimonial-carousel').then(m => ({ default: m.TestimonialCarousel })), { ssr: false })
+const FAQSection = dynamic(() => import('@/components/shared/faq-section').then(m => ({ default: m.FAQSection })), { ssr: false })
 
 interface FeaturedCollege {
   id: string

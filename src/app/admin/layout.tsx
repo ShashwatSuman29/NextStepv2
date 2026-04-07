@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { LogoutButton } from '@/components/layout/logout-button'
@@ -43,7 +44,7 @@ export default async function AdminLayout({
       <aside className="hidden w-64 flex-col border-r border-border/60 bg-card md:flex">
         <div className="flex h-14 items-center border-b border-border/60 px-5">
           <Link href="/admin" className="flex items-center gap-0 group">
-            <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-ml-2 -mr-5 h-12 w-auto object-contain transition-transform group-hover:scale-105" />
+            <Image src="/Nextstep_logo.png" alt="NextStep Logo" width={48} height={48} className="-ml-2 -mr-5 h-12 w-auto object-contain transition-transform group-hover:scale-105" priority />
             <div className="flex items-center gap-1.5">
               <span className="text-lg font-bold text-foreground" style={{ fontFamily: 'var(--font-serif)' }}>
                 NextStep
@@ -99,7 +100,7 @@ export default async function AdminLayout({
           >
             <div className="flex items-center justify-between">
               <Link href="/admin" className="flex items-center gap-0 pl-1 shrink-0">
-                <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-mr-3 h-9 w-auto object-contain" />
+                <Image src="/Nextstep_logo.png" alt="NextStep Logo" width={36} height={36} className="-mr-3 h-9 w-auto object-contain" />
                 <span className="text-sm font-bold text-foreground" style={{ fontFamily: 'var(--font-serif)' }}>NextStep</span>
                 <span className="ml-1.5 rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-bold text-primary uppercase tracking-wider">Admin</span>
               </Link>

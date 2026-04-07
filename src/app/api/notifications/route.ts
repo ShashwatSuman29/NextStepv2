@@ -1,8 +1,9 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 /**
  * GET /api/notifications — In-app notifications. ?unread=true filter.
+ * Uses session client (RLS SELECT policy allows own notifications).
  */
 export async function GET(request: Request) {
   const supabase = await createClient()
@@ -12,9 +13,6 @@ export async function GET(request: Request) {
   const { data: dbUser } = await supabase.from('users').select('id').eq('auth_id', user.id).single()
   if (!dbUser) return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
-  const { searchParams } = new URL(request.url)
-  const unreadOnly = searchParams.get('unread') === 'true'
-
   let query = supabase
     .from('notifications')
     .select('*')
@@ -23,7 +21,8 @@ export async function GET(request: Request) {
     .order('created_at', { ascending: false })
     .limit(50)
 
-  if (unreadOnly) {
+  const { searchParams } = new URL(request.url)
+  if (searchParams.get('unread') === 'true') {
     query = query.eq('is_read', false)
   }
 
@@ -35,10 +34,16 @@ export async function GET(request: Request) {
   return NextResponse.json({ data })
 }
 
+/**
+ * DELETE /api/notifications — Delete all own notifications.
+ * Uses service client for DB writes — RLS only has SELECT policy for students.
+ */
 export async function DELETE() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const authClient = await createClient()
+  const { data: { user } } = await authClient.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const supabase = createServiceClient()
 
   const { data: dbUser } = await supabase.from('users').select('id').eq('auth_id', user.id).single()
   if (!dbUser) return NextResponse.json({ error: 'User not found' }, { status: 404 })

@@ -69,7 +69,10 @@
       "Bash(taskkill /F /IM node.exe)",
       "mcp__Claude_Preview__preview_start",
       "Bash(taskkill /F /PID 20652)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(find /c/NextStepv2 -name tailwind.config.* -type f)",
+      "Bash(find /c/NextStepv2/src -type f \\\\\\(-name *.tsx -o -name *.ts \\\\\\))",
+      "Bash(xargs grep:*)"
     ]
   }
 }

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export function Footer() {
   return (
@@ -8,7 +9,7 @@ export function Footer() {
           {/* Brand — 2 cols */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-0">
-              <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-ml-2 -mr-5 md:-mr-6 h-14 md:h-16 w-auto object-contain" />
+              <Image src="/Nextstep_logo.png" alt="NextStep Logo" width={64} height={64} className="-ml-2 -mr-5 md:-mr-6 h-14 md:h-16 w-auto object-contain" />
               <span
                 className="text-lg md:text-xl font-bold text-foreground tracking-tight"
                 style={{ fontFamily: 'var(--font-serif)' }}

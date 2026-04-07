@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, type Variants } from 'framer-motion'
+import { motion, useReducedMotion, type Variants } from 'framer-motion'
 import { type ReactNode } from 'react'
 
 const fadeUp: Variants = {
@@ -47,6 +47,12 @@ export function AnimatedSection({
   duration = 0.6,
   once = true,
 }: AnimatedSectionProps) {
+  const prefersReducedMotion = useReducedMotion()
+
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>
+  }
+
   return (
     <motion.div
       initial="hidden"
@@ -71,6 +77,12 @@ export function StaggerContainer({
   className?: string
   staggerDelay?: number
 }) {
+  const prefersReducedMotion = useReducedMotion()
+
+  if (prefersReducedMotion) {
+    return <div className={className}>{children}</div>
+  }
+
   return (
     <motion.div
       initial="hidden"

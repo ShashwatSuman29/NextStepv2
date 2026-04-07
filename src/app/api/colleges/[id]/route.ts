@@ -26,5 +26,7 @@ export async function GET(
     return NextResponse.json({ error: 'College not found' }, { status: 404 })
   }
 
-  return NextResponse.json({ data: college })
+  const res = NextResponse.json({ data: college })
+  res.headers.set('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=600')
+  return res
 }

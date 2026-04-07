@@ -69,5 +69,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Failed to fetch colleges' }, { status: 500 })
   }
 
-  return NextResponse.json({ data, count, page, pageSize })
+  const res = NextResponse.json({ data, count, page, pageSize })
+  res.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300')
+  return res
 }

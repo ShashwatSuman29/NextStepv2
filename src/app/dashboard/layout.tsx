@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { ProfileDropdown } from '@/components/layout/profile-dropdown'
@@ -63,7 +64,7 @@ export default async function DashboardLayout({
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-0 pl-1 shrink-0 group transition-transform duration-300 hover:scale-[1.02]">
-              <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-mr-4 md:-mr-5 h-10 md:h-11 w-auto object-contain transition-transform group-hover:scale-105" />
+              <Image src="/Nextstep_logo.png" alt="NextStep Logo" width={44} height={44} className="-mr-4 md:-mr-5 h-10 md:h-11 w-auto object-contain transition-transform group-hover:scale-105" priority />
               <span
                 className="text-base md:text-lg font-bold tracking-tight text-foreground"
                 style={{ fontFamily: 'var(--font-serif)' }}

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { createClient } from '@/lib/supabase/client'
@@ -91,7 +92,7 @@ export function Navbar({
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-0 pl-1 transition-transform duration-300 hover:scale-[1.02] group shrink-0">
-              <img src="/Nextstep_logo.png" alt="NextStep Logo" className="-mr-4 md:-mr-5 h-10 md:h-11 w-auto object-contain transition-transform group-hover:scale-105" />
+              <Image src="/Nextstep_logo.png" alt="NextStep Logo" width={44} height={44} className="-mr-4 md:-mr-5 h-10 md:h-11 w-auto object-contain transition-transform group-hover:scale-105" priority />
               <span
                 className={`text-base md:text-lg font-bold tracking-tight transition-colors duration-300 ${
                   isTransparent ? 'text-white' : 'text-foreground'

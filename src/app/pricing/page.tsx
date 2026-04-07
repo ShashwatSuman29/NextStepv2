@@ -4,7 +4,7 @@ import { FAQSection } from '@/components/shared/faq-section'
 import { createServiceClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 600 // ISR: refresh pricing every 10 minutes
 
 export const metadata = {
   title: 'Pricing | NextStep',

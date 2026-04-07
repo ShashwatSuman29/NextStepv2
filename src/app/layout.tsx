@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import { QueryProvider } from '@/components/providers/query-provider'
 import './globals.css'
@@ -15,6 +15,13 @@ const playfair = Playfair_Display({
   weight: ['400', '500', '600', '700'],
   display: 'swap',
 })
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#1a3c34',
+}
 
 export const metadata: Metadata = {
   title: "NextStep | Expert Guidance & College Admissions",
